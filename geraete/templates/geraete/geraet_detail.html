@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Gerätendetails{% endblock %}
+{% block content %}
+<h2>{{ object.bezeichnung }}</h2>
+<p><b>Identifikation:</b> {{ object.identifikation }}</p>
+<p><b>Seriennummer:</b> {{ object.seriennummer }}</p>
+<p><b>Status:</b> {{ object.status }}</p>
+<p><b>Fahrzeug:</b> {{ object.fahrzeug }}</p>
+<p><b>Bemerkung:</b> {{ object.bemerkung }}</p>
+
+<a href="{% url 'geraete_bearbeiten' object.pk %}">Bearbeiten</a> |
+<a href="{% url 'geraete_loeschen' object.pk %}">Löschen</a> |
+<a href="{% url 'geraete_liste' %}">Zurück zur Liste</a>
+{% endblock %}

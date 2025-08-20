@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Fahrzeugübersicht{% endblock %}
+{% block content %}
+<h2>Fahrzeugübersicht</h2>
+<a href="{% url 'fahrzeuge_neu' %}">+ Neues Fahrzeug</a>
+<ul>
+  {% for f in fahrzeuge %}
+    <li>
+      <a href="{% url 'fahrzeuge_detail' f.pk %}">{{ f.bezeichnung }}</a>
+      ({{ f.kennzeichen }})
+    </li>
+  {% empty %}
+    <li>Keine Fahrzeuge vorhanden.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

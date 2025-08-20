@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Fahrzeugdetails{% endblock %}
+{% block content %}
+<h2>{{ object.bezeichnung }}</h2>
+<p><b>Identifikation:</b> {{ object.bezeichnung }}</p>
+<p><b>Seriennummer:</b> {{ object.kennzeichen }}</p>
+<p><b>Status:</b> {{ object.aktiv }}</p>
+<p><b>Standort:</b> {{ object.standort }}</p>
+<p><b>Bemerkung:</b> {{ object.bemerkung }}</p>
+
+<a href="{% url 'fahrzeuge_bearbeiten' object.pk %}">Bearbeiten</a> |
+<a href="{% url 'fahrzeuge_loeschen' object.pk %}">Löschen</a> |
+<a href="{% url 'fahrzeuge_liste' %}">Zurück zur Liste</a>
+{% endblock %}

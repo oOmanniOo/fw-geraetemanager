@@ -1,0 +1,29 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}FW Geräteverwaltung{% endblock %}</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Feuerwehr Gerätemanager</h1>
+        <nav>
+            <a href="{% url 'geraete_liste' %}">Geräte</a> |
+            <a href="{% url 'fahrzeuge_liste' %}">Fahrzeuge</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>© Feuerwehr Buxtehude – Gerätemanager</p>
+    </footer>
+</body>
+</html>
