@@ -1,3 +1,22 @@
 from django.contrib import admin
+from .models import Geraet, Geraetekategorie, Status
 
-# Register your models here.
+@admin.register(Geraet)
+class GeraetAdmin(admin.ModelAdmin):
+    list_display = ('bezeichnung', 'identifikation', 'seriennummer', 'barcode', 'kategorie', 'status', 'fahrzeug', 'bemerkung')
+    list_filter = ('kategorie', 'status', 'fahrzeug')
+    search_fields = ('bezeichnung', 'identifikation', 'seriennummer', 'barcode')
+    list_editable = ('status',)
+    list_per_page = 25
+    ordering = ('bezeichnung',)
+
+@admin.register(Geraetekategorie)
+class GeraetekategorieAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+    ordering = ('name',)
+
+@admin.register(Status)
+class StatusAdmin(admin.ModelAdmin):
+    list_display = ('name', )
+    search_fields = ('name',)
