@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Prüfung bearbeiten: {{ pruefung.geraet.name }} ({{ pruefung.art.name }})</h2>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <!-- Prüfungsdetails -->
+    <div class="pruefungs-details" style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+        <h3>Prüfungsdetails</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+                <label for="pruefungsdatum">Prüfungsdatum:</label>
+                <input type="date" id="pruefungsdatum" name="pruefungsdatum" value="{{ pruefung.datum|date:'Y-m-d' }}" style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+            <div>
+                <label for="pruefer">Prüfer:</label>
+                <input type="text" id="pruefer" name="pruefer" value="{{ pruefung.pruefer }}" style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+        </div>
+        <div style="margin-top: 15px;">
+            <label for="allgemeine_bemerkung">Allgemeine Bemerkung zur Prüfung:</label>
+            <textarea id="allgemeine_bemerkung" name="allgemeine_bemerkung" rows="3" style="width: 100%; padding: 8px; margin-top: 5px;">{{ pruefung.bemerkung }}</textarea>
+        </div>
+    </div>
+
+    <!-- Checkliste -->
+    <h3>Prüfpunkte</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+            <tr style="background-color: #f5f5f5;">
+                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Prüfpunkt</th>
+                <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">OK?</th>
+                <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Bemerkung</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for antwort in pruefung.antworten.all %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    {{ antwort.punkt.name }} 
+                    {% if antwort.punkt.ist_pflicht %}<span style="color: red;">*</span>{% endif %}
+                </td>
+                <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">
+                    <input type="checkbox" name="punkt_{{ antwort.id }}" {% if antwort.ok %}checked{% endif %}>
+                </td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                    <input type="text" name="bemerkung_{{ antwort.id }}" value="{{ antwort.bemerkung }}" style="width: 100%; padding: 5px;">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Prüfung speichern</button>
+</form>
+{% endblock %}

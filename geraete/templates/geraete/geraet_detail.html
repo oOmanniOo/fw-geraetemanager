@@ -8,7 +8,7 @@
 <p><b>Fahrzeug:</b> {{ object.fahrzeug }}</p>
 <p><b>Bemerkung:</b> {{ object.bemerkung }}</p>
 
-<a href="{% url 'geraete_bearbeiten' object.pk %}">Bearbeiten</a> |
-<a href="{% url 'geraete_loeschen' object.pk %}">Löschen</a> |
-<a href="{% url 'geraete_liste' %}">Zurück zur Liste</a>
+<a href="{% url 'geraete:geraete_bearbeiten' object.pk %}">Bearbeiten</a> |
+<a href="{% url 'geraete:geraete_loeschen' object.pk %}">Löschen</a> |
+<a href="{% url 'geraete:geraete_liste' %}">Zurück zur Liste</a>
 {% endblock %}

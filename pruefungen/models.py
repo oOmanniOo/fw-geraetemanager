@@ -17,7 +17,7 @@ class Checkliste(models.Model):
         return self.name
 
 class Checklistenpunkt(models.Model):
-    checkliste = models.ForeignKey(Checkliste, on_delete=models.CASCADE)
+    checkliste = models.ForeignKey(Checkliste, on_delete=models.CASCADE, related_name='punkte')
     name = models.CharField(max_length=255)
     ist_pflicht = models.BooleanField(default=True)
 
@@ -36,7 +36,7 @@ class Pruefung(models.Model):
         return f"{self.geraet.bezeichnung} - {self.art.name} durchgeführt am {self.datum}"
 
 class Antwort(models.Model):
-    pruefung = models.ForeignKey(Pruefung, on_delete=models.CASCADE)
+    pruefung = models.ForeignKey(Pruefung, on_delete=models.CASCADE, related_name='antworten')
     punkt = models.ForeignKey(Checklistenpunkt, on_delete=models.CASCADE)
     ok = models.BooleanField(default=False)
     bemerkung = models.TextField(blank=True)

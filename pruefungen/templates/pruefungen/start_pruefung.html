@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Prüfung starten für {{ geraet.name }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <label for="art">Prüfungsart wählen:</label>
+    <select name="art" id="art">
+        {% for art in arten %}
+            <option value="{{ art.id }}">{{ art.name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Starten</button>
+</form>
+{% endblock %}
