@@ -2,13 +2,13 @@
 {% block title %}Geräteübersicht{% endblock %}
 {% block content %}
 <h2>Geräteübersicht</h2>
-<a href="{% url 'geraete_neu' %}">+ Neues Gerät</a>
+<a href="{% url 'geraete:geraete_neu' %}">+ Neues Gerät</a>
 <ul>
   {% for g in geraete %}
-    <li>
-      <a href="{% url 'geraete_detail' g.pk %}">{{ g.bezeichnung }}</a>
+    <div>
+        <a href="{% url 'geraete:geraete_detail' g.pk %}">{{ g.bezeichnung }}</a>
       ({{ g.identifikation }})
-    </li>
+    </div>
   {% empty %}
     <li>Keine Geräte vorhanden.</li>
   {% endfor %}

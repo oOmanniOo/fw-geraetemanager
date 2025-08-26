@@ -2,13 +2,13 @@
 {% block title %}Fahrzeugübersicht{% endblock %}
 {% block content %}
 <h2>Fahrzeugübersicht</h2>
-<a href="{% url 'fahrzeuge_neu' %}">+ Neues Fahrzeug</a>
+<a href="{% url 'fahrzeuge:fahrzeuge_neu' %}">+ Neues Fahrzeug</a>
 <ul>
   {% for f in fahrzeuge %}
-    <li>
-      <a href="{% url 'fahrzeuge_detail' f.pk %}">{{ f.bezeichnung }}</a>
+    <div>
+        <a href="{% url 'fahrzeuge:fahrzeuge_detail' f.pk %}">{{ f.bezeichnung }}</a>
       ({{ f.kennzeichen }})
-    </li>
+    </div>
   {% empty %}
     <li>Keine Fahrzeuge vorhanden.</li>
   {% endfor %}
