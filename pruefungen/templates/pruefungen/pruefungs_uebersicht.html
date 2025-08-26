@@ -1,87 +1,94 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Prüfungsübersicht</h2>
+<h2 class="mb-4">Prüfungsübersicht</h2>
 
 <!-- Filter-Bereich -->
-<div class="filter-section">
-    <h3>Filter</h3>
+<div class="card mb-4">
+  <div class="card-body">
+    <h3 class="h5 mb-3">Filter</h3>
     <form method="get">
-        <div>
-            <label for="geraet">Gerät:</label>
-            <input type="text" id="geraet" name="geraet" value="{{ request.GET.geraet }}" placeholder="Gerätename eingeben">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label for="geraet" class="form-label">Gerät</label>
+          <input type="text" id="geraet" name="geraet" value="{{ request.GET.geraet }}" placeholder="Gerätename eingeben" class="form-control">
         </div>
-        <div>
-            <label for="art">Prüfungsart:</label>
-            <select id="art" name="art">
-                <option value="">Alle Arten</option>
-                {% for art in arten %}
-                <option value="{{ art.name }}" {% if request.GET.art == art.name %}selected{% endif %}>{{ art.name }}</option>
-                {% endfor %}
-            </select>
+        <div class="col-md-3">
+          <label for="art" class="form-label">Prüfungsart</label>
+          <select id="art" name="art" class="form-select">
+            <option value="">Alle Arten</option>
+            {% for art in arten %}
+            <option value="{{ art.name }}" {% if request.GET.art == art.name %}selected{% endif %}>{{ art.name }}</option>
+            {% endfor %}
+          </select>
         </div>
-        <div>
-            <label for="bestanden">Status:</label>
-            <select id="bestanden" name="bestanden">
-                <option value="">Alle</option>
-                <option value="true" {% if request.GET.bestanden == 'true' %}selected{% endif %}>Bestanden</option>
-                <option value="false" {% if request.GET.bestanden == 'false' %}selected{% endif %}>Nicht bestanden</option>
-            </select>
+        <div class="col-md-3">
+          <label for="bestanden" class="form-label">Status</label>
+          <select id="bestanden" name="bestanden" class="form-select">
+            <option value="">Alle</option>
+            <option value="true" {% if request.GET.bestanden == 'true' %}selected{% endif %}>Bestanden</option>
+            <option value="false" {% if request.GET.bestanden == 'false' %}selected{% endif %}>Nicht bestanden</option>
+          </select>
         </div>
-        <div>
-            <button type="submit">Filtern</button>
-            <a href="{% url 'pruefungen:pruefungs_uebersicht' %}">Zurücksetzen</a>
+        <div class="col-md-2 d-grid d-md-flex gap-2">
+          <button type="submit" class="btn btn-primary">Filtern</button>
+          <a href="{% url 'pruefungen:pruefungs_uebersicht' %}" class="btn btn-secondary">Zurücksetzen</a>
         </div>
+      </div>
     </form>
+  </div>
 </div>
 
 <!-- Prüfungsliste -->
-<div class="pruefungs-liste">
-    {% if pruefungen %}
-    <table class="table table-striped m-4 ">
-        <thead>
-            <tr>
-                <th>Datum</th>
-                <th>Gerät</th>
-                <th>Prüfungsart</th>
-                <th>Prüfer</th>
-                <th>Status</th>
-                <th>Aktionen</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for pruefung in pruefungen %}
-            <tr>
-                <td>{{ pruefung.datum|date:"d.m.Y" }}</td>
-                <td>
-                    <a href="{% url 'geraete:geraete_detail' pruefung.geraet.pk %}">{{ pruefung.geraet.bezeichnung }}</a>
-                </td>
-                <td>{{ pruefung.art.name }}</td>
-                <td>{{ pruefung.pruefer }}</td>
-                <td>
-                    {% if pruefung.bestanden %}
-                    <span>✓ Bestanden</span>
-                    {% else %}
-                    <span>✗ Nicht bestanden</span>
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{% url 'pruefungen:bearbeite_pruefung' pruefung.pk %}">Bearbeiten</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+{% if pruefungen %}
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Gerät</th>
+          <th>Prüfungsart</th>
+          <th>Prüfer</th>
+          <th>Status</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for pruefung in pruefungen %}
+        <tr>
+          <td>{{ pruefung.datum|date:"d.m.Y" }}</td>
+          <td><a href="{% url 'geraete:geraete_detail' pruefung.geraet.pk %}">{{ pruefung.geraet.bezeichnung }}</a></td>
+          <td>{{ pruefung.art.name }}</td>
+          <td>{{ pruefung.pruefer }}</td>
+          <td>
+            {% if pruefung.bestanden %}
+              <span class="badge bg-success">Bestanden</span>
+            {% else %}
+              <span class="badge bg-danger">Nicht bestanden</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'pruefungen:bearbeite_pruefung' pruefung.pk %}" class="btn btn-sm btn-outline-primary">Bearbeiten</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
-    
-    <!-- Zusammenfassung -->
-    <div>
-        <h4>Zusammenfassung</h4>
-        <p><strong>Gesamtanzahl Prüfungen:</strong> {{ pruefungen.count }}</p>
-        <p><strong>Bestanden:</strong> {{ pruefungen|dictsort:"bestanden"|length }}</p>
-        <p><strong>Nicht bestanden:</strong> {{ pruefungen|dictsort:"bestanden"|length }}</p>
+  </div>
+
+  <!-- Zusammenfassung -->
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="h6">Zusammenfassung</h4>
+          <p class="mb-1"><strong>Gesamtanzahl Prüfungen:</strong> {{ pruefungen.count }}</p>
+          <p class="mb-1"><strong>Bestanden:</strong> {{ pruefungen|dictsort:"bestanden"|length }}</p>
+          <p class="mb-0"><strong>Nicht bestanden:</strong> {{ pruefungen|dictsort:"bestanden"|length }}</p>
+        </div>
+      </div>
     </div>
-    
-    {% else %}
-    <p>Keine Prüfungen gefunden.</p>
-    {% endif %}
-</div>
+  </div>
+{% else %}
+  <div class="alert alert-info">Keine Prüfungen gefunden.</div>
+{% endif %}
 {% endblock %}

@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Fahrzeug löschen</h2>
-<p>Bist du sicher, dass du "{{ object }}" löschen möchtest?</p>
-<form method="post">
+<h2 class="mb-3">Fahrzeug löschen</h2>
+<div class="alert alert-warning" role="alert">
+  Bist du sicher, dass du "{{ object }}" löschen möchtest?
+</div>
+<form method="post" class="d-inline">
   {% csrf_token %}
-  <button type="submit">Ja, löschen</button>
+  <button type="submit" class="btn btn-danger">Ja, löschen</button>
 </form>
-<a href="{% url 'fahrzeuge:fahrzeuge_liste' %}">Abbrechen</a>
+<a href="{% url 'fahrzeuge:fahrzeuge_liste' %}" class="btn btn-secondary ms-2">Abbrechen</a>
 {% endblock %}

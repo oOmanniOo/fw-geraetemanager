@@ -1,16 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Fahrzeugübersicht{% endblock %}
 {% block content %}
-<h2>Fahrzeugübersicht</h2>
-<a href="{% url 'fahrzeuge:fahrzeuge_neu' %}">+ Neues Fahrzeug</a>
-<ul>
+<h2 class="mb-3">Fahrzeugübersicht</h2>
+<a href="{% url 'fahrzeuge:fahrzeuge_neu' %}" class="btn btn-success mb-3">+ Neues Fahrzeug</a>
+
+<ul class="list-group">
   {% for f in fahrzeuge %}
-    <div>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
         <a href="{% url 'fahrzeuge:fahrzeuge_detail' f.pk %}">{{ f.bezeichnung }}</a>
-      ({{ f.kennzeichen }})
-    </div>
+        <span class="text-muted">({{ f.kennzeichen }})</span>
+      </div>
+    </li>
   {% empty %}
-    <li>Keine Fahrzeuge vorhanden.</li>
+    <li class="list-group-item">Keine Fahrzeuge vorhanden.</li>
   {% endfor %}
 </ul>
 {% endblock %}

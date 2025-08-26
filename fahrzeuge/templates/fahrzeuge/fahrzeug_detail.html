@@ -1,14 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Fahrzeugdetails{% endblock %}
 {% block content %}
-<h2>{{ object.bezeichnung }}</h2>
-<p><b>Identifikation:</b> {{ object.bezeichnung }}</p>
-<p><b>Seriennummer:</b> {{ object.kennzeichen }}</p>
-<p><b>Status:</b> {{ object.aktiv }}</p>
-<p><b>Standort:</b> {{ object.standort }}</p>
-<p><b>Bemerkung:</b> {{ object.bemerkung }}</p>
-
-<a href="{% url 'fahrzeuge:fahrzeuge_bearbeiten' object.pk %}">Bearbeiten</a> |
-<a href="{% url 'fahrzeuge:fahrzeuge_loeschen' object.pk %}">Löschen</a> |
-<a href="{% url 'fahrzeuge:fahrzeuge_liste' %}">Zurück zur Liste</a>
+<h2 class="mb-4">{{ object.bezeichnung }}</h2>
+<div class="card">
+  <div class="card-body">
+    <p class="mb-2"><strong>Identifikation:</strong> {{ object.bezeichnung }}</p>
+    <p class="mb-2"><strong>Seriennummer:</strong> {{ object.kennzeichen }}</p>
+    <p class="mb-2"><strong>Status:</strong> {{ object.aktiv }}</p>
+    <p class="mb-2"><strong>Standort:</strong> {{ object.standort }}</p>
+    <p class="mb-3"><strong>Bemerkung:</strong> {{ object.bemerkung }}</p>
+    <div class="d-flex gap-2">
+      <a href="{% url 'fahrzeuge:fahrzeuge_bearbeiten' object.pk %}" class="btn btn-primary btn-sm">Bearbeiten</a>
+      <a href="{% url 'fahrzeuge:fahrzeuge_loeschen' object.pk %}" class="btn btn-outline-danger btn-sm">Löschen</a>
+      <a href="{% url 'fahrzeuge:fahrzeuge_liste' %}" class="btn btn-secondary btn-sm">Zurück zur Liste</a>
+    </div>
+  </div>
+</div>
 {% endblock %}

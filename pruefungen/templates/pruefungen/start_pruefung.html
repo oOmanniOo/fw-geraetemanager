@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Prüfung starten für {{ geraet.name }}</h2>
+<h2 class="mb-4">Prüfung starten für {{ geraet.name }}</h2>
 
-<form method="post">
-    {% csrf_token %}
-    <label for="art">Prüfungsart wählen:</label>
-    <select name="art" id="art">
-        {% for art in arten %}
-            <option value="{{ art.id }}">{{ art.name }}</option>
-        {% endfor %}
+<form method="post" class="card card-body">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="art" class="form-label">Prüfungsart wählen</label>
+    <select name="art" id="art" class="form-select">
+      {% for art in arten %}
+        <option value="{{ art.id }}">{{ art.name }}</option>
+      {% endfor %}
     </select>
-    <button type="submit">Starten</button>
+  </div>
+  <button type="submit" class="btn btn-primary">Starten</button>
 </form>
 {% endblock %}

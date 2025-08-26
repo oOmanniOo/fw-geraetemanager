@@ -1,16 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Geräteübersicht{% endblock %}
 {% block content %}
-<h2>Geräteübersicht</h2>
-<a href="{% url 'geraete:geraete_neu' %}">+ Neues Gerät</a>
-<ul>
+<h2 class="mb-3">Geräteübersicht</h2>
+<a href="{% url 'geraete:geraete_neu' %}" class="btn btn-success mb-3">+ Neues Gerät</a>
+
+<ul class="list-group">
   {% for g in geraete %}
-    <div>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
         <a href="{% url 'geraete:geraete_detail' g.pk %}">{{ g.bezeichnung }}</a>
-      ({{ g.identifikation }})
-    </div>
+        <span class="text-muted">({{ g.identifikation }})</span>
+      </div>
+    </li>
   {% empty %}
-    <li>Keine Geräte vorhanden.</li>
+    <li class="list-group-item">Keine Geräte vorhanden.</li>
   {% endfor %}
 </ul>
 {% endblock %}
