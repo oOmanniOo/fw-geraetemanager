@@ -2,13 +2,13 @@
 {% block title %}Geräteübersicht{% endblock %}
 {% block content %}
 <h2 class="mb-3">Geräteübersicht</h2>
-<a href="{% url 'geraete:geraete_neu' %}" class="btn btn-success mb-3">+ Neues Gerät</a>
+<a href="{% url 'geraete:neu' %}" class="btn btn-success mb-3">+ Neues Gerät</a>
 
 <ul class="list-group">
   {% for g in geraete %}
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <div>
-        <a href="{% url 'geraete:geraete_detail' g.pk %}">{{ g.bezeichnung }}</a>
+        <a href="{% url 'geraete:detail' g.pk %}">{{ g.bezeichnung }}</a>
         <span class="text-muted">({{ g.identifikation }})</span>
       </div>
     </li>

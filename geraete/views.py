@@ -15,7 +15,7 @@ class GeraetDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['pruefungen'] = Pruefung.objects.filter(geraet=self.object).order_by('-datum')   
+        context['pruefungen'] = Pruefung.objects.filter(geraet=self.object).order_by('-datum')    # type: ignore
         return context
         
 
@@ -23,15 +23,15 @@ class GeraetCreateView(CreateView):
     model = Geraet
     template_name = "geraete/geraet_form.html"
     fields = ["bezeichnung", "identifikation", "seriennummer", "kategorie", "status", "fahrzeug", "bemerkung"]
-    success_url = reverse_lazy("geraete:geraete_liste")
+    success_url = reverse_lazy("geraete:liste")
 
 class GeraetUpdateView(UpdateView):
     model = Geraet
     template_name = "geraete/geraet_form.html"
     fields = ["bezeichnung", "identifikation", "seriennummer", "kategorie", "status", "fahrzeug", "bemerkung"]
-    success_url = reverse_lazy("geraete:geraete_liste")
+    success_url = reverse_lazy("geraete:liste")
 
 class GeraetDeleteView(DeleteView):
     model = Geraet
     template_name = "geraete/geraet_bestaetigen_loeschen.html"
-    success_url = reverse_lazy("geraete:geraete_liste")
+    success_url = reverse_lazy("geraete:liste")

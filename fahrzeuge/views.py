@@ -15,15 +15,15 @@ class FahrzeugCreateView(CreateView):
     model = Fahrzeug
     template_name = "fahrzeuge/fahrzeug_form.html"
     fields = ["bezeichnung", "kennzeichen", "funkrufname", "standort", "aktiv"]
-    success_url = reverse_lazy("fahrzeuge_liste")
+    success_url = reverse_lazy("fahrzeuge:liste")
 
 class FahrzeugUpdateView(UpdateView):
     model = Fahrzeug
     template_name = "fahrzeuge/fahrzeug_form.html"
     fields = ["bezeichnung", "kennzeichen", "funkrufname", "standort", "aktiv"]
-    success_url = reverse_lazy("fahrzeuge_liste")
+    success_url = reverse_lazy("fahrzeuge:liste")
 
 class FahrzeugDeleteView(DeleteView):
     model = Fahrzeug
     template_name = "fahrzeuge/fahrzeug_bestaetigen_loeschen.html"
-    success_url = reverse_lazy("fahrzeuge_liste")
+    success_url = reverse_lazy("fahrzeuge:liste")

@@ -2,13 +2,13 @@
 {% block title %}Fahrzeugübersicht{% endblock %}
 {% block content %}
 <h2 class="mb-3">Fahrzeugübersicht</h2>
-<a href="{% url 'fahrzeuge:fahrzeuge_neu' %}" class="btn btn-success mb-3">+ Neues Fahrzeug</a>
+<a href="{% url 'fahrzeuge:neu' %}" class="btn btn-success mb-3">+ Neues Fahrzeug</a>
 
 <ul class="list-group">
   {% for f in fahrzeuge %}
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <div>
-        <a href="{% url 'fahrzeuge:fahrzeuge_detail' f.pk %}">{{ f.bezeichnung }}</a>
+        <a href="{% url 'fahrzeuge:detail' f.pk %}">{{ f.bezeichnung }}</a>
         <span class="text-muted">({{ f.kennzeichen }})</span>
       </div>
     </li>

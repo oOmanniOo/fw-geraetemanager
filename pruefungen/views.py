@@ -23,10 +23,10 @@ def start_pruefung(request, geraet_id):
         )
 
         # Antworten vorbereiten
-        for punkt in checkliste.punkte.all():
+        for punkt in checkliste.punkte.all():   # type: ignore
             Antwort.objects.create(pruefung=pruefung, punkt=punkt, ok=False)
 
-        return redirect('pruefungen:bearbeite_pruefung', pruefung_id=pruefung.id)
+        return redirect('pruefungen:bearbeite', pruefung_id=pruefung.id)   # type: ignore
 
     arten = Pruefungsart.objects.all()
     return render(request, 'pruefungen/start_pruefung.html', {'geraet': geraet, 'arten': arten})
@@ -54,7 +54,7 @@ def bearbeite_pruefung(request, pruefung_id):
         
         # Checklistenpunkte verarbeiten
         bestanden = True
-        for antwort in pruefung.antworten.all():
+        for antwort in pruefung.antworten.all():   # type: ignore
             ok = request.POST.get(f'punkt_{antwort.id}') == 'on'
             bemerkung = request.POST.get(f'bemerkung_{antwort.id}', '')
             antwort.ok = ok
@@ -65,7 +65,7 @@ def bearbeite_pruefung(request, pruefung_id):
 
         pruefung.bestanden = bestanden
         pruefung.save()
-        return redirect('geraete:geraete_detail', pk=pruefung.geraet.id)  # zurück zum Gerät
+        return redirect('geraete:detail', pk=pruefung.geraet.id)    # type: ignore
 
     return render(request, 'pruefungen/bearbeite_pruefung.html', {'pruefung': pruefung})
 

@@ -31,7 +31,7 @@
         </div>
         <div class="col-md-2 d-grid d-md-flex gap-2">
           <button type="submit" class="btn btn-primary">Filtern</button>
-          <a href="{% url 'pruefungen:pruefungs_uebersicht' %}" class="btn btn-secondary">Zurücksetzen</a>
+          <a href="{% url 'pruefungen:uebersicht' %}" class="btn btn-secondary">Zurücksetzen</a>
         </div>
       </div>
     </form>
@@ -56,7 +56,7 @@
         {% for pruefung in pruefungen %}
         <tr>
           <td>{{ pruefung.datum|date:"d.m.Y" }}</td>
-          <td><a href="{% url 'geraete:geraete_detail' pruefung.geraet.pk %}">{{ pruefung.geraet.bezeichnung }}</a></td>
+          <td><a href="{% url 'geraete:detail' pruefung.geraet.pk %}">{{ pruefung.geraet.bezeichnung }}</a></td>
           <td>{{ pruefung.art.name }}</td>
           <td>{{ pruefung.pruefer }}</td>
           <td>
@@ -67,7 +67,7 @@
             {% endif %}
           </td>
           <td>
-            <a href="{% url 'pruefungen:bearbeite_pruefung' pruefung.pk %}" class="btn btn-sm btn-outline-primary">Bearbeiten</a>
+            <a href="{% url 'pruefungen:bearbeite' pruefung.pk %}" class="btn btn-sm btn-outline-primary">Bearbeiten</a>
           </td>
         </tr>
         {% endfor %}

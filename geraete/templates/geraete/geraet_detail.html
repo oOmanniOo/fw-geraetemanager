@@ -13,9 +13,9 @@
     <p class="mb-2"><strong>Fahrzeug:</strong> {{ object.fahrzeug }}</p>
     <p class="mb-3"><strong>Bemerkung:</strong> {{ object.bemerkung }}</p>
     <div class="d-flex gap-2">
-      <a href="{% url 'geraete:geraete_bearbeiten' object.pk %}" class="btn btn-primary btn-sm">Bearbeiten</a>
-      <a href="{% url 'geraete:geraete_loeschen' object.pk %}" class="btn btn-outline-danger btn-sm">Löschen</a>
-      <a href="{% url 'geraete:geraete_liste' %}" class="btn btn-secondary btn-sm">Zurück zur Liste</a>
+      <a href="{% url 'geraete:bearbeiten' object.pk %}" class="btn btn-primary btn-sm">Bearbeiten</a>
+      <a href="{% url 'geraete:loeschen' object.pk %}" class="btn btn-outline-danger btn-sm">Löschen</a>
+      <a href="{% url 'geraete:liste' %}" class="btn btn-secondary btn-sm">Zurück zur Liste</a>
     </div>
   </div>
 </div>
@@ -58,6 +58,6 @@
     <p>Keine Prüfungen vorhanden.</p>
   {% endif %}
 
-  <a href="{% url 'pruefungen:start_pruefung' geraet.id %}" class="btn btn-danger mt-3">Neue Prüfung starten</a>
+  <a href="{% url 'pruefungen:start' geraet.id %}" class="btn btn-danger mt-3">Neue Prüfung starten</a>
 </div>
 {% endblock %}

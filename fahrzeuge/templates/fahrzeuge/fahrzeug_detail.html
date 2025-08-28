@@ -10,9 +10,9 @@
     <p class="mb-2"><strong>Standort:</strong> {{ object.standort }}</p>
     <p class="mb-3"><strong>Bemerkung:</strong> {{ object.bemerkung }}</p>
     <div class="d-flex gap-2">
-      <a href="{% url 'fahrzeuge:fahrzeuge_bearbeiten' object.pk %}" class="btn btn-primary btn-sm">Bearbeiten</a>
-      <a href="{% url 'fahrzeuge:fahrzeuge_loeschen' object.pk %}" class="btn btn-outline-danger btn-sm">Löschen</a>
-      <a href="{% url 'fahrzeuge:fahrzeuge_liste' %}" class="btn btn-secondary btn-sm">Zurück zur Liste</a>
+      <a href="{% url 'fahrzeuge:bearbeiten' object.pk %}" class="btn btn-primary btn-sm">Bearbeiten</a>
+      <a href="{% url 'fahrzeuge:loeschen' object.pk %}" class="btn btn-outline-danger btn-sm">Löschen</a>
+      <a href="{% url 'fahrzeuge:liste' %}" class="btn btn-secondary btn-sm">Zurück zur Liste</a>
     </div>
   </div>
 </div>
