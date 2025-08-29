@@ -1,19 +1,28 @@
 {% extends "base.html" %}
 {% block title %}Fahrzeugübersicht{% endblock %}
 {% block content %}
-<h2 class="mb-3">Fahrzeugübersicht</h2>
-<a href="{% url 'fahrzeuge:neu' %}" class="btn btn-success mb-3">+ Neues Fahrzeug</a>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Fahrzeuge</h2>
+  <a href="{% url 'fahrzeuge:neu' %}" class="btn btn-primary">Neues Fahrzeug</a>
+</div>
 
-<ul class="list-group">
-  {% for f in fahrzeuge %}
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-      <div>
-        <a href="{% url 'fahrzeuge:detail' f.pk %}">{{ f.bezeichnung }}</a>
-        <span class="text-muted">({{ f.kennzeichen }})</span>
+{% if fahrzeuge %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+    {% for f in fahrzeuge %}
+      <div class="col">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title d-flex justify-content-between align-items-start">
+              <a href="{% url 'fahrzeuge:detail' f.pk %}" class="stretched-link text-decoration-none">{{ f.bezeichnung }}</a>
+              <span class="badge bg-secondary">{{ f.kennzeichen }}</span>
+            </h5>
+            <p class="card-text text-muted mb-0">Standort: {{ f.standort|default:'—' }}</p>
+          </div>
+        </div>
       </div>
-    </li>
-  {% empty %}
-    <li class="list-group-item">Keine Fahrzeuge vorhanden.</li>
-  {% endfor %}
-</ul>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">Keine Fahrzeuge vorhanden.</div>
+{% endif %}
 {% endblock %}

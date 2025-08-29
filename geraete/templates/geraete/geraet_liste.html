@@ -1,19 +1,47 @@
 {% extends "base.html" %}
 {% block title %}Geräteübersicht{% endblock %}
 {% block content %}
-<h2 class="mb-3">Geräteübersicht</h2>
-<a href="{% url 'geraete:neu' %}" class="btn btn-success mb-3">+ Neues Gerät</a>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Geräte</h2>
+  <a href="{% url 'geraete:neu' %}" class="btn btn-primary">Neues Gerät</a>
+</div>
 
-<ul class="list-group">
-  {% for g in geraete %}
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-      <div>
-        <a href="{% url 'geraete:detail' g.pk %}">{{ g.bezeichnung }}</a>
-        <span class="text-muted">({{ g.identifikation }})</span>
-      </div>
-    </li>
-  {% empty %}
-    <li class="list-group-item">Keine Geräte vorhanden.</li>
-  {% endfor %}
-</ul>
+{% if geraete %}
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Gerät</th>
+          <th>Identifikation</th>
+          <th>Fahrzeug</th>
+          <th>Status</th>
+          <th class="text-end">Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for g in geraete %}
+          <tr>
+            <td>
+              <a href="{% url 'geraete:detail' g.pk %}">{{ g.bezeichnung }}</a>
+            </td>
+            <td class="text-muted">{{ g.identifikation }}</td>
+            <td>{{ g.fahrzeug|default:'—' }}</td>
+            <td>
+              {% if g.status %}
+                <span class="badge bg-success">{{ g.status }}</span>
+              {% else %}
+                <span class="badge bg-secondary">—</span>
+              {% endif %}
+            </td>
+            <td class="text-end">
+              <a href="{% url 'geraete:bearbeiten' g.pk %}" class="btn btn-sm btn-outline-primary">Bearbeiten</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="alert alert-info">Keine Geräte vorhanden.</div>
+{% endif %}
 {% endblock %}

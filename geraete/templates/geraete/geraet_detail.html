@@ -4,25 +4,43 @@
 
 {% block content %}
 
-<h2 class="mb-4">{{ object.bezeichnung }}</h2>
-<div class="card">
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">{{ object.bezeichnung }}</h2>
+  <span class="badge {% if object.status == 'aktiv' or object.status %}bg-success{% else %}bg-danger{% endif %}">{{ object.status }}</span>
+</div>
+
+<div class="card mb-3">
   <div class="card-body">
-    <p class="mb-2"><strong>Identifikation:</strong> {{ object.identifikation }}</p>
-    <p class="mb-2"><strong>Seriennummer:</strong> {{ object.seriennummer }}</p>
-    <p class="mb-2"><strong>Status:</strong> {{ object.status }}</p>
-    <p class="mb-2"><strong>Fahrzeug:</strong> {{ object.fahrzeug }}</p>
-    <p class="mb-3"><strong>Bemerkung:</strong> {{ object.bemerkung }}</p>
-    <div class="d-flex gap-2">
-      <a href="{% url 'geraete:bearbeiten' object.pk %}" class="btn btn-primary btn-sm">Bearbeiten</a>
-      <a href="{% url 'geraete:loeschen' object.pk %}" class="btn btn-outline-danger btn-sm">Löschen</a>
-      <a href="{% url 'geraete:liste' %}" class="btn btn-secondary btn-sm">Zurück zur Liste</a>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="text-muted small">Identifikation</div>
+        <div class="fw-semibold">{{ object.identifikation }}</div>
+      </div>
+      <div class="col-md-6">
+        <div class="text-muted small">Seriennummer</div>
+        <div class="fw-semibold">{{ object.seriennummer|default:'—' }}</div>
+      </div>
+      <div class="col-md-6">
+        <div class="text-muted small">Fahrzeug</div>
+        <div class="fw-semibold">{{ object.fahrzeug|default:'—' }}</div>
+      </div>
+      <div class="col-12">
+        <div class="text-muted small">Bemerkung</div>
+        <div>{{ object.bemerkung|default:'—' }}</div>
+      </div>
     </div>
   </div>
 </div>
 
+<div class="d-flex gap-2">
+  <a href="{% url 'geraete:bearbeiten' object.pk %}" class="btn btn-primary">Bearbeiten</a>
+  <a href="{% url 'geraete:loeschen' object.pk %}" class="btn btn-outline-danger">Löschen</a>
+  <a href="{% url 'geraete:liste' %}" class="btn btn-secondary">Zurück zur Liste</a>
+</div>
+
  <h3>Prüfungen</h3>
   {% if pruefungen %}
-    <table class="table table-striped">
+    <table class="table table-striped align-middle">
       <thead>
         <tr>
           <th>Datum</th>
@@ -46,7 +64,7 @@
               {% endif %}
             </td>
             <td>
-              <a href="" class="btn btn-sm btn-primary">
+              <a href="{% url 'pruefungen:detail' pruefung.id %}" class="btn btn-sm btn-primary">
                 Details
               </a>
             </td>

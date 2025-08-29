@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Prüfungsdetails{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Prüfungsdetails</h2>
+  <div class="d-flex gap-2">
+    <a href="{% url 'pruefungen:bearbeite' object.pk %}" class="btn btn-primary">Bearbeiten</a>
+    <a href="{% url 'geraete:detail' object.geraet.pk %}" class="btn btn-secondary">Zum Gerät</a>
+  </div>
+  <a href="{% url 'pruefungen:pdf' pruefung.id %}" class="btn btn-secondary">
+    📄 PDF herunterladen
+</a>
+</div>
+
+<!-- Prüfungsübersicht -->
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="text-muted small">Gerät</div>
+        <div class="fw-semibold">{{ object.geraet.bezeichnung }}</div>
+      </div>
+      <div class="col-md-6">
+        <div class="text-muted small">Prüfungsart</div>
+        <div class="fw-semibold">{{ object.art.name }}</div>
+      </div>
+      <div class="col-md-6">
+        <div class="text-muted small">Prüfungsdatum</div>
+        <div class="fw-semibold">{{ object.datum|date:"d.m.Y" }}</div>
+      </div>
+      <div class="col-md-6">
+        <div class="text-muted small">Prüfer</div>
+        <div class="fw-semibold">{{ object.pruefer|default:'—' }}</div>
+      </div>
+      <div class="col-12">
+        <div class="text-muted small">Status</div>
+        <div>
+          {% if object.bestanden %}
+            <span class="badge bg-success">Bestanden</span>
+          {% else %}
+            <span class="badge bg-danger">Nicht bestanden</span>
+          {% endif %}
+        </div>
+      </div>
+      {% if object.bemerkung %}
+        <div class="col-12">
+          <div class="text-muted small">Bemerkung</div>
+          <div>{{ object.bemerkung }}</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Prüfpunkte -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="h5 mb-0">Prüfpunkte</h3>
+  </div>
+  <div class="card-body">
+    {% if object.antworten.all %}
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Prüfpunkt</th>
+              <th class="text-center">Status</th>
+              <th>Bemerkung</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for antwort in object.antworten.all %}
+              <tr>
+                <td>
+                  {{ antwort.punkt.name }}
+                  {% if antwort.punkt.ist_pflicht %}
+                    <span class="text-danger">*</span>
+                  {% endif %}
+                </td>
+                <td class="text-center">
+                  {% if antwort.ok %}
+                    <span class="badge bg-success">✓ OK</span>
+                  {% else %}
+                    <span class="badge bg-danger">✗ Fehler</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if antwort.bemerkung %}
+                    <span class="text-muted">{{ antwort.bemerkung }}</span>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-info">Keine Prüfpunkte vorhanden.</div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

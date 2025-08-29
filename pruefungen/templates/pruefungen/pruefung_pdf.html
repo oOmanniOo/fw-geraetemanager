@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prüfungsbericht · {{ object.geraet.bezeichnung }}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 16mm 18mm 16mm;
+    }
+
+    :root {
+      --text: #111;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --bg: #ffffff;
+      --ok: #16a34a;
+      --error: #dc2626;
+      --chip: #f3f4f6;
+    }
+
+    html, body { padding: 0; margin: 0; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.45;
+      font-size: 12.5px;
+    }
+
+    .page {
+      display: block;
+    }
+
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .subtitle { color: var(--muted); margin-top: 2px; }
+
+    .status-chip {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-weight: 600;
+      font-size: 11.5px;
+      letter-spacing: .2px;
+      background: var(--chip);
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .status-ok { color: var(--ok); border-color: #bbf7d0; background: #f0fdf4; }
+    .status-fail { color: var(--error); border-color: #fecaca; background: #fef2f2; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 18px;
+      margin-bottom: 14px;
+    }
+    .grid .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .3px; }
+    .grid .value { font-weight: 600; margin-top: 2px; }
+
+    .note {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #fafafa;
+      margin-top: 8px;
+      margin-bottom: 14px;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 6px;
+    }
+    tbody td {
+      border-bottom: 1px solid var(--border);
+      padding: 9px 6px;
+      vertical-align: top;
+    }
+    .cell-center { text-align: center; }
+    .req { color: var(--error); font-weight: 700; }
+    .muted { color: var(--muted); }
+
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .signature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 16px;
+    }
+    .sig-box {
+      border-top: 1px solid var(--border);
+      padding-top: 6px;
+      min-height: 40px;
+    }
+  </style>
+  {% load static %}
+  {% load i18n %}
+</head>
+<body>
+  <div class="page">
+    <div class="header">
+      <div>
+        <h1 class="title">Prüfungsbericht</h1>
+        <div class="subtitle">{{ object.art.name }} · {{ object.datum|date:"d.m.Y" }}</div>
+      </div>
+      <div>
+        {% if object.bestanden %}
+          <span class="status-chip status-ok">✓ Bestanden</span>
+        {% else %}
+          <span class="status-chip status-fail">✗ Nicht bestanden</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="label">Gerät</div>
+        <div class="value">{{ object.geraet.bezeichnung }}</div>
+      </div>
+      <div>
+        <div class="label">Prüfungsart</div>
+        <div class="value">{{ object.art.name }}</div>
+      </div>
+      <div>
+        <div class="label">Prüfungsdatum</div>
+        <div class="value">{{ object.datum|date:"d.m.Y" }}</div>
+      </div>
+      <div>
+        <div class="label">Prüfer</div>
+        <div class="value">{{ object.pruefer|default:'—' }}</div>
+      </div>
+      <div>
+        <div class="label">Status</div>
+        <div class="value">
+          {% if object.bestanden %}
+            ✓ Bestanden
+          {% else %}
+            ✗ Nicht bestanden
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% if object.bemerkung %}
+      <div class="note">
+        <strong>Bemerkung:</strong>
+        <div>{{ object.bemerkung }}</div>
+      </div>
+    {% endif %}
+
+    <h2 style="margin: 14px 0 8px 0; font-size: 14px;">Prüfpunkte</h2>
+    {% if object.antworten.all %}
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 60%;">Prüfpunkt</th>
+            <th class="cell-center" style="width: 15%;">Status</th>
+            <th>Bemerkung</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for antwort in object.antworten.all %}
+            <tr>
+              <td>
+                {{ antwort.punkt.name }}
+                {% if antwort.punkt.ist_pflicht %}
+                  <span class="req" aria-label="Pflicht">*</span>
+                {% endif %}
+              </td>
+              <td class="cell-center">
+                {% if antwort.ok %}
+                  <span style="color: var(--ok); font-weight: 700;">OK</span>
+                {% else %}
+                  <span style="color: var(--error); font-weight: 700;">Fehler</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if antwort.bemerkung %}
+                  <span class="muted">{{ antwort.bemerkung }}</span>
+                {% else %}
+                  <span class="muted">—</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="muted">Keine Prüfpunkte vorhanden.</div>
+    {% endif %}
+
+    <div class="signature">
+      <div class="sig-box">
+        <div class="muted">Unterschrift Prüfer</div>
+      </div>
+      <div class="sig-box">
+        <div class="muted">Unterschrift Verantwortliche/r</div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <div>Gerätemanager · Prüfungs-ID: {{ object.id }}</div>
+      <div>Erstellt am {% now "d.m.Y H:i" %}</div>
+    </div>
+  </div>
+</body>
+</html>

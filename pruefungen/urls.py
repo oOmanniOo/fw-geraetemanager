@@ -7,4 +7,6 @@ urlpatterns = [
      path('', views.pruefungs_uebersicht, name ='uebersicht'),
      path('start/<int:geraet_id>/', views.start_pruefung, name='start'),
      path('bearbeite/<int:pruefung_id>/', views.bearbeite_pruefung, name='bearbeite'),
+     path('<int:pk>/', views.PruefungDetailView.as_view(), name='detail'),
+     path('<int:pk>/pdf/', views.pruefung_pdf, name='pdf'),
 ]

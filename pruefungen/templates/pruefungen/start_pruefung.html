@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<h2 class="mb-4">Prüfung starten für {{ geraet.name }}</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Prüfung starten</h2>
+  <a href="{% url 'geraete:detail' geraet.id %}" class="btn btn-secondary">Zurück zum Gerät</a>
+</div>
 
 <form method="post" class="card card-body">
   {% csrf_token %}

@@ -1,8 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.views.generic import DetailView
 from django.utils import timezone
 from datetime import datetime
-from .models import Pruefung, Pruefungsart, Checkliste, Checklistenpunkt, Antwort
+from .models import Pruefung, Pruefungsart, Checkliste, Antwort
 from geraete.models import Geraet
+
+from weasyprint import HTML
 
 
 def start_pruefung(request, geraet_id):
@@ -94,3 +99,26 @@ def pruefungs_uebersicht(request):
 
     return render(request, 'pruefungen/pruefungs_uebersicht.html', context)
 
+class PruefungDetailView(DetailView):
+    model = Pruefung
+    template = 'pruefungen/pruefung_detail.html'
+    context_object_name = 'pruefung'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Statt __debug_context nehmen wir einen erlaubten Key
+        context["debug_context"] = context
+        return context
+
+
+def pruefung_pdf(request, pk):
+    pruefung = get_object_or_404(Pruefung, pk=pk)
+
+    html_string = render_to_string("pruefungen/pruefung_pdf.html", {"object": pruefung})
+
+    # PDF erzeugen
+    pdf = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
+
+    response = HttpResponse(pdf, content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="pruefung_{pruefung.id}.pdf"'  # type: ignore
+    return response

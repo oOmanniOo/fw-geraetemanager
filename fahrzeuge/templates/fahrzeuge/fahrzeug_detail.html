@@ -1,19 +1,33 @@
 {% extends "base.html" %}
 {% block title %}Fahrzeugdetails{% endblock %}
 {% block content %}
-<h2 class="mb-4">{{ object.bezeichnung }}</h2>
-<div class="card">
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">{{ object.bezeichnung }}</h2>
+  <span class="badge {% if object.aktiv %}bg-success{% else %}bg-danger{% endif %}">{% if object.aktiv %}Aktiv{% else %}Inaktiv{% endif %}</span>
+</div>
+
+<div class="card mb-3">
   <div class="card-body">
-    <p class="mb-2"><strong>Identifikation:</strong> {{ object.bezeichnung }}</p>
-    <p class="mb-2"><strong>Seriennummer:</strong> {{ object.kennzeichen }}</p>
-    <p class="mb-2"><strong>Status:</strong> {{ object.aktiv }}</p>
-    <p class="mb-2"><strong>Standort:</strong> {{ object.standort }}</p>
-    <p class="mb-3"><strong>Bemerkung:</strong> {{ object.bemerkung }}</p>
-    <div class="d-flex gap-2">
-      <a href="{% url 'fahrzeuge:bearbeiten' object.pk %}" class="btn btn-primary btn-sm">Bearbeiten</a>
-      <a href="{% url 'fahrzeuge:loeschen' object.pk %}" class="btn btn-outline-danger btn-sm">Löschen</a>
-      <a href="{% url 'fahrzeuge:liste' %}" class="btn btn-secondary btn-sm">Zurück zur Liste</a>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="text-muted small">Kennzeichen</div>
+        <div class="fw-semibold">{{ object.kennzeichen }}</div>
+      </div>
+      <div class="col-md-6">
+        <div class="text-muted small">Standort</div>
+        <div class="fw-semibold">{{ object.standort|default:'—' }}</div>
+      </div>
+      <div class="col-12">
+        <div class="text-muted small">Bemerkung</div>
+        <div>{{ object.bemerkung|default:'—' }}</div>
+      </div>
     </div>
   </div>
+</div>
+
+<div class="d-flex gap-2">
+  <a href="{% url 'fahrzeuge:bearbeiten' object.pk %}" class="btn btn-primary">Bearbeiten</a>
+  <a href="{% url 'fahrzeuge:loeschen' object.pk %}" class="btn btn-outline-danger">Löschen</a>
+  <a href="{% url 'fahrzeuge:liste' %}" class="btn btn-secondary">Zurück zur Liste</a>
 </div>
 {% endblock %}
