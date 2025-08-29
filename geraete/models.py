@@ -1,5 +1,5 @@
 from django.db import models
-from fahrzeuge.models import Fahrzeug
+from fahrzeuge.models import Geraeteraum
 
 # Create your models here.
 class Status(models.Model):
@@ -22,8 +22,7 @@ class Geraet(models.Model):
     barcode = models.CharField(max_length=100, unique=True, blank=True, null=True)
     kategorie = models.ForeignKey(Geraetekategorie, on_delete=models.CASCADE)
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
-
-    fahrzeug = models.ForeignKey(Fahrzeug, on_delete=models.CASCADE)
+    geraeteraum = models.ForeignKey(Geraeteraum, on_delete=models.CASCADE, blank=True, null=True)
     bemerkung = models.TextField(blank=True)
     erstellt_am = models.DateTimeField(auto_now_add=True)
     geaendert_am = models.DateTimeField(auto_now=True)

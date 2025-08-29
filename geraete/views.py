@@ -22,13 +22,12 @@ class GeraetDetailView(DetailView):
 class GeraetCreateView(CreateView):
     model = Geraet
     template_name = "geraete/geraet_form.html"
-    fields = ["bezeichnung", "identifikation", "seriennummer", "kategorie", "status", "fahrzeug", "bemerkung"]
+    fields = ["bezeichnung", "identifikation", "seriennummer", "kategorie", "status", "geraeteraum", "bemerkung"]
     success_url = reverse_lazy("geraete:liste")
-
 class GeraetUpdateView(UpdateView):
     model = Geraet
     template_name = "geraete/geraet_form.html"
-    fields = ["bezeichnung", "identifikation", "seriennummer", "kategorie", "status", "fahrzeug", "bemerkung"]
+    fields = ["bezeichnung", "identifikation", "seriennummer", "kategorie", "status", "geraeteraum", "bemerkung"]
     success_url = reverse_lazy("geraete:liste")
 
 class GeraetDeleteView(DeleteView):

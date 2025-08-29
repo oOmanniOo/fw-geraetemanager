@@ -2,8 +2,8 @@
 {% block title %}Fahrzeugdetails{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h2 class="mb-0">{{ object.bezeichnung }}</h2>
-  <span class="badge {% if object.aktiv %}bg-success{% else %}bg-danger{% endif %}">{% if object.aktiv %}Aktiv{% else %}Inaktiv{% endif %}</span>
+  <h2 class="mb-0">{{ fahrzeug.bezeichnung }}</h2>
+  <span class="badge {% if fahrzeug.aktiv %}bg-success{% else %}bg-danger{% endif %}">{% if fahrzeug.aktiv %}Aktiv{% else %}Inaktiv{% endif %}</span>
 </div>
 
 <div class="card mb-3">
@@ -11,23 +11,58 @@
     <div class="row g-3">
       <div class="col-md-6">
         <div class="text-muted small">Kennzeichen</div>
-        <div class="fw-semibold">{{ object.kennzeichen }}</div>
+        <div class="fw-semibold">{{ fahrzeug.kennzeichen }}</div>
       </div>
       <div class="col-md-6">
         <div class="text-muted small">Standort</div>
-        <div class="fw-semibold">{{ object.standort|default:'—' }}</div>
+        <div class="fw-semibold">{{ fahrzeug.standort|default:'—' }}</div>
       </div>
       <div class="col-12">
         <div class="text-muted small">Bemerkung</div>
-        <div>{{ object.bemerkung|default:'—' }}</div>
+        <div>{{ fahrzeug.bemerkung|default:'—' }}</div>
       </div>
     </div>
   </div>
 </div>
+<h2>Geräteräume</h2>
+{% if fahrzeug.geraeteraeume.all %}
+  <div class="row g-3">
+    {% for raum in fahrzeug.geraeteraeume.all %}
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">{{ raum.bezeichnung }}</h5>
+            <span class="badge bg-secondary">{{ raum.geraete_count }} Geräte</span>
+          </div>
+          <div class="card-body">
+            {% if raum.geraet_set.all %}
+              <ul class="list-unstyled mb-0">
+                {% for geraet in raum.geraet_set.all %}
+                  <li class="d-flex justify-content-between align-items-center py-1">
+                    <span>{{ geraet.bezeichnung }}</span>
+                    <small class="text-muted">{{ geraet.identifikation }}</small>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-muted mb-0">Keine Geräte vorhanden.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">
+    <i class="bi bi-info-circle"></i>
+    Keine Geräteräume vorhanden.
+  </div>
+{% endif %}
+
 
 <div class="d-flex gap-2">
-  <a href="{% url 'fahrzeuge:bearbeiten' object.pk %}" class="btn btn-primary">Bearbeiten</a>
-  <a href="{% url 'fahrzeuge:loeschen' object.pk %}" class="btn btn-outline-danger">Löschen</a>
+  <a href="{% url 'fahrzeuge:bearbeiten' fahrzeug.pk %}" class="btn btn-primary">Bearbeiten</a>
+  <a href="{% url 'fahrzeuge:loeschen' fahrzeug.pk %}" class="btn btn-outline-danger">Löschen</a>
   <a href="{% url 'fahrzeuge:liste' %}" class="btn btn-secondary">Zurück zur Liste</a>
 </div>
 {% endblock %}

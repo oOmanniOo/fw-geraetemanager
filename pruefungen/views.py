@@ -82,13 +82,16 @@ def pruefungs_uebersicht(request):
     bestanden_filter = request.GET.get('bestanden')
 
     if geraet_filter:
-        pruefungen = pruefungen.filter(geraet_id=geraet_filter)
+        pruefungen = pruefungen.filter(geraet__bezeichnung__icontains=geraet_filter)
 
     if art_filter:
         pruefungen = pruefungen.filter(art_id=art_filter)
     
-    if bestanden_filter in ['ja', 'nein']:
-        pruefungen = pruefungen.filter(bestanden=bestanden_filter == 'ja')
+    if bestanden_filter:
+        if bestanden_filter.lower() in ['true']:
+            pruefungen = pruefungen.filter(bestanden=True)
+        elif bestanden_filter.lower() in ['false']:
+            pruefungen = pruefungen.filter(bestanden=False)
 
     context = {
         'pruefungen': pruefungen, 

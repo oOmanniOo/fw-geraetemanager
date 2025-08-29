@@ -3,8 +3,8 @@ from .models import Geraet, Geraetekategorie, Status
 
 @admin.register(Geraet)
 class GeraetAdmin(admin.ModelAdmin):
-    list_display = ('bezeichnung', 'identifikation', 'seriennummer', 'barcode', 'kategorie', 'status', 'fahrzeug', 'bemerkung')
-    list_filter = ('kategorie', 'status', 'fahrzeug')
+    list_display = ('bezeichnung', 'identifikation', 'seriennummer', 'barcode', 'kategorie', 'status', 'geraeteraum', 'bemerkung')
+    list_filter = ('kategorie', 'status', 'geraeteraum')
     search_fields = ('bezeichnung', 'identifikation', 'seriennummer', 'barcode')
     list_editable = ('status',)
     list_per_page = 25

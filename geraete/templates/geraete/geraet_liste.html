@@ -25,7 +25,7 @@
               <a href="{% url 'geraete:detail' g.pk %}">{{ g.bezeichnung }}</a>
             </td>
             <td class="text-muted">{{ g.identifikation }}</td>
-            <td>{{ g.fahrzeug|default:'—' }}</td>
+            <td>{{ g.geraeteraum|default:'—' }}</td>
             <td>
               {% if g.status %}
                 <span class="badge bg-success">{{ g.status }}</span>

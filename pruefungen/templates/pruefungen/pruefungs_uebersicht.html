@@ -67,6 +67,7 @@
             {% endif %}
           </td>
           <td>
+            <a href="{% url 'pruefungen:detail' pruefung.pk %}" class="btn btn-sm btn-outline-primary">Detail</a>
             <a href="{% url 'pruefungen:bearbeite' pruefung.pk %}" class="btn btn-sm btn-outline-primary">Bearbeiten</a>
           </td>
         </tr>

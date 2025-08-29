@@ -11,7 +11,7 @@
 
 <div class="card mb-3">
   <div class="card-body">
-    <div class="row g-3">
+    <div class="row g-2">
       <div class="col-md-6">
         <div class="text-muted small">Identifikation</div>
         <div class="fw-semibold">{{ object.identifikation }}</div>
@@ -22,7 +22,12 @@
       </div>
       <div class="col-md-6">
         <div class="text-muted small">Fahrzeug</div>
-        <div class="fw-semibold">{{ object.fahrzeug|default:'—' }}</div>
+        <div class="fw-semibold">{{ object.geraeteraum.fahrzeug|default:'—' }}</div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="text-muted small">Geräteraum</div>
+        <div class="fw-semibold">{{ object.geraeteraum.bezeichnung|default:'—' }}</div>
       </div>
       <div class="col-12">
         <div class="text-muted small">Bemerkung</div>
