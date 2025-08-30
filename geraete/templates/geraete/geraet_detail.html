@@ -81,6 +81,8 @@
     <p>Keine Prüfungen vorhanden.</p>
   {% endif %}
 
+{% include "include/pagination.html" with page_obj=page_obj is_paginated=is_paginated paginator=paginator %}
+
   <a href="{% url 'pruefungen:start' geraet.id %}" class="btn btn-danger mt-3">Neue Prüfung starten</a>
 </div>
 {% endblock %}

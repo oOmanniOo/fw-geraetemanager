@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.views.generic import DetailView
@@ -76,6 +77,7 @@ def bearbeite_pruefung(request, pruefung_id):
 
 def pruefungs_uebersicht(request):
     pruefungen = Pruefung.objects.all().order_by('-datum')
+    arten = Pruefungsart.objects.all()
 
     geraet_filter = request.GET.get('geraet')
     art_filter = request.GET.get('art')
@@ -93,13 +95,20 @@ def pruefungs_uebersicht(request):
         elif bestanden_filter.lower() in ['false']:
             pruefungen = pruefungen.filter(bestanden=False)
 
+    paginator = Paginator(pruefungen, 20)  
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    
     context = {
-        'pruefungen': pruefungen, 
+        'arten': arten,
+        'pruefungen': page,  # page ist das aktuelle Page-Objekt
+        'page_obj': page,    # für das Pagination-Template
+        'paginator': paginator,
+        'is_paginated': page.has_other_pages(),
         'geraet_filter': geraet_filter,
         'art_filter': art_filter,
         'bestanden_filter': bestanden_filter,
     }
-
     return render(request, 'pruefungen/pruefungs_uebersicht.html', context)
 
 class PruefungDetailView(DetailView):

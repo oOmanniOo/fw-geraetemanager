@@ -17,7 +17,7 @@
           <select id="art" name="art" class="form-select">
             <option value="">Alle Arten</option>
             {% for art in arten %}
-            <option value="{{ art.name }}" {% if request.GET.art == art.name %}selected{% endif %}>{{ art.name }}</option>
+            <option value="{{ art.id }}" {% if request.GET.art == art.name %}selected{% endif %}>{{ art.name }}</option>
             {% endfor %}
           </select>
         </div>
@@ -76,19 +76,8 @@
     </table>
   </div>
 
-  <!-- Zusammenfassung -->
-  <div class="row mt-4">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <h4 class="h6">Zusammenfassung</h4>
-          <p class="mb-1"><strong>Gesamtanzahl Prüfungen:</strong> {{ pruefungen.count }}</p>
-          <p class="mb-1"><strong>Bestanden:</strong> {{ pruefungen|dictsort:"bestanden"|length }}</p>
-          <p class="mb-0"><strong>Nicht bestanden:</strong> {{ pruefungen|dictsort:"bestanden"|length }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
+  {% include "include/pagination.html" %}
+
 {% else %}
   <div class="alert alert-info">Keine Prüfungen gefunden.</div>
 {% endif %}

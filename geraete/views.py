@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from . models import Geraet
@@ -15,7 +16,16 @@ class GeraetDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['pruefungen'] = Pruefung.objects.filter(geraet=self.object).order_by('-datum')    # type: ignore
+        pruefungen = Pruefung.objects.filter(geraet=self.object).order_by('-datum') #type: ignore
+
+        paginator = Paginator(pruefungen, 5)  # 5 Prüfungen pro Seite
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
+        context['paginator'] = paginator
+        context['pruefungen'] = page_obj.object_list
+        context['page_obj'] = page_obj
+        context['is_paginated'] = page_obj.has_other_pages()
         return context
         
 
