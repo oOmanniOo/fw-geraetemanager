@@ -51,10 +51,19 @@
           <div>{{ object.bemerkung }}</div>
         </div>
       {% endif %}
+      <div class="col-12">
+        <div class="text-muted small">Nächste Prüfung</div>
+        <div class="fw-semibold">
+          {% if pruefung.naechste_pruefung %}
+            {{ pruefung.naechste_pruefung }}
+          {% else %}
+            Keine Intervalle (nur nach Benutzung)
+          {% endif %}
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
 <!-- Prüfpunkte -->
 <div class="card">
   <div class="card-header">

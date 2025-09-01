@@ -1,10 +1,18 @@
 from django.db import models
 from geraete.models import Geraetekategorie, Geraet
 
+from dateutil.relativedelta import relativedelta
+
 # Create your models here.
 class Pruefungsart(models.Model):
     name = models.CharField(max_length=255)
-
+    beschreibung = models.TextField(blank=True, null=True)
+    intervall_monate = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Anzahl Monate bis zur nächsten Prüfung (leer lassen, wenn kein Intervall)"
+    )
+    
     def __str__(self):
         return self.name
 
@@ -34,6 +42,13 @@ class Pruefung(models.Model):
 
     def __str__(self):
         return f"{self.geraet.bezeichnung} - {self.art.name} durchgeführt am {self.datum}"
+    
+    @property
+    def naechste_pruefung(self):
+        """Berechnet das nächste Prüfungsdatum auf Basis des Monatsintervalls."""
+        if self.art.intervall_monate:
+            return self.datum + relativedelta(months=self.art.intervall_monate)
+        return None
 
 class Antwort(models.Model):
     pruefung = models.ForeignKey(Pruefung, on_delete=models.CASCADE, related_name='antworten')

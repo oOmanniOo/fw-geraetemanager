@@ -171,6 +171,16 @@
           {% endif %}
         </div>
       </div>
+      <div>
+        <div class="label">Nächste Prüfung</div>
+        <div class="value">
+          {% if pruefung.naechste_pruefung %}
+            {{ pruefung.naechste_pruefung }}
+          {% else %}
+            Keine Intervalle (nur nach Benutzung)
+          {% endif %}
+        </div>
+      </div>
     </div>
 
     {% if object.bemerkung %}
