@@ -29,7 +29,7 @@ class Pruefung(models.Model):
     art = models.ForeignKey(Pruefungsart, on_delete=models.CASCADE)
     datum = models.DateField()
     pruefer = models.CharField(max_length=255)
-    bestanden = models.BooleanField(default=False)
+    bestanden = models.BooleanField(null=True, blank=True)
     bemerkung = models.TextField(blank=True)
 
     def __str__(self):

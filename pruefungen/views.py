@@ -25,12 +25,13 @@ def start_pruefung(request, geraet_id):
             art=art,
             datum=timezone.now(),
             pruefer=request.user.username if request.user.is_authenticated else 'Unbekannt',
-            bestanden=False  # wird später berechnet
+            bestanden=None  # wird später berechnet
         )
 
         # Antworten vorbereiten
-        for punkt in checkliste.punkte.all():   # type: ignore
-            Antwort.objects.create(pruefung=pruefung, punkt=punkt, ok=False)
+        if checkliste:    
+            for punkt in checkliste.punkte.all():   # type: ignore
+                Antwort.objects.create(pruefung=pruefung, punkt=punkt, ok=False)
 
         return redirect('pruefungen:bearbeite', pruefung_id=pruefung.id)   # type: ignore
 
@@ -59,17 +60,24 @@ def bearbeite_pruefung(request, pruefung_id):
             pruefung.bemerkung = allgemeine_bemerkung
         
         # Checklistenpunkte verarbeiten
-        bestanden = True
-        for antwort in pruefung.antworten.all():   # type: ignore
-            ok = request.POST.get(f'punkt_{antwort.id}') == 'on'
-            bemerkung = request.POST.get(f'bemerkung_{antwort.id}', '')
-            antwort.ok = ok
-            antwort.bemerkung = bemerkung
-            antwort.save()
-            if not ok and antwort.punkt.ist_pflicht:
-                bestanden = False
-
-        pruefung.bestanden = bestanden
+        antworten = pruefung.antworten.all()  # type: ignore
+        if antworten.exists():
+            bestanden = True
+            for antwort in pruefung.antworten.all():   # type: ignore
+                ok = request.POST.get(f'punkt_{antwort.id}') == 'on'
+                bemerkung = request.POST.get(f'bemerkung_{antwort.id}', '')
+                antwort.ok = ok
+                antwort.bemerkung = bemerkung
+                antwort.save()
+                if not ok and antwort.punkt.ist_pflicht:
+                    bestanden = False
+            pruefung.bestanden = bestanden
+        
+        else:
+            # keine Checkliste -> manueller Status
+            bestanden = request.POST.get('manuell_bestanden') == 'on'
+            pruefung.bestanden = bestanden
+        
         pruefung.save()
         return redirect('geraete:detail', pk=pruefung.geraet.id)    # type: ignore
 

@@ -26,8 +26,8 @@
     </div>
   </div>
 
-  <!-- Checkliste -->
-  <h3 class="h5 mb-3">Prüfpunkte</h3>
+  {% if pruefung.antworten.exists %}
+   <h3 class="h5 mb-3">Prüfpunkte</h3>
   <div class="table-responsive mb-3">
     <table class="table table-striped align-middle">
       <thead>
@@ -55,6 +55,13 @@
       </tbody>
     </table>
   </div>
+{% else %}
+  <label>
+    <input type="checkbox" name="manuell_bestanden" {% if pruefung.bestanden %}checked{% endif %}>
+    Prüfung bestanden
+  </label>
+  <textarea name="allgemeine_bemerkung">{{ pruefung.bemerkung }}</textarea>
+{% endif %}
 
   <button type="submit" class="btn btn-primary">Prüfung speichern</button>
 </form>
