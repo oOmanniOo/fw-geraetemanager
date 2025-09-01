@@ -13,7 +13,7 @@
         <tr>
           <th>Gerät</th>
           <th>Identifikation</th>
-          <th>Fahrzeug</th>
+          <th>Fahrzeug/Geräteraum</th>
           <th>Status</th>
           <th class="text-end">Aktionen</th>
         </tr>
@@ -25,7 +25,18 @@
               <a href="{% url 'geraete:detail' g.pk %}">{{ g.bezeichnung }}</a>
             </td>
             <td class="text-muted">{{ g.identifikation }}</td>
-            <td>{{ g.geraeteraum|default:'—' }}</td>
+            <td>
+              {% if g.fahrzeug %}
+                <div class="fw-semibold">{{ g.fahrzeug.bezeichnung }}</div>
+                {% if g.geraeteraum %}
+                  <div class="text-muted small">{{ g.geraeteraum.bezeichnung }}</div>
+                {% endif %}
+              {% elif g.geraeteraum %}
+                <div class="text-muted small">{{ g.geraeteraum.bezeichnung }}</div>
+              {% else %}
+                <span class="text-muted">—</span>
+              {% endif %}
+            </td>
             <td>
               {% if g.status %}
                 <span class="badge bg-success">{{ g.status }}</span>

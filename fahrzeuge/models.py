@@ -11,14 +11,11 @@ class Fahrzeug(models.Model):
 
     def __str__(self):
         return self.bezeichnung
+    
 
 class Geraeteraum(models.Model):
     bezeichnung = models.CharField(max_length=255)
-    fahrzeug = models.ForeignKey(Fahrzeug, on_delete=models.CASCADE, related_name='geraeteraeume')
 
     def __str__(self):
-        return f"{self.bezeichnung} ({self.fahrzeug.bezeichnung})"
+        return self.bezeichnung
 
-    @property
-    def geraete_count(self):
-        return self.geraet_set.count()

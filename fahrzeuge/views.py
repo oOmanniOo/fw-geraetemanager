@@ -15,9 +15,9 @@ class FahrzeugDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        geraeteraeume = self.object.geraeteraeume.all()
-        context['geraeteraeume'] = geraeteraeume
-        context['geraete'] = Geraet.objects.filter(geraeteraum__in=geraeteraeume)
+        # Geräte direkt über die related_name Beziehung laden
+        geraete = self.object.geraete.all()
+        context['geraete'] = geraete
         return context
 
 class FahrzeugCreateView(CreateView):
