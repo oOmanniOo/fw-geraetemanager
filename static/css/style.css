@@ -1,0 +1,76 @@
+/* Feuerwehr Theme Utilities for Bootstrap 5 */
+:root {
+  --fire-red: #c1121f;
+  --fire-red-600: #a50e19;
+  --fire-amber: #f77f00;
+  --fire-amber-600: #cc6800;
+  --fire-charcoal: #0b0d10;
+  --fire-slate: #15181d;
+  --fire-gray: #2a2f36;
+}
+
+[data-bs-theme="light"] {
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #212529;
+  --bs-border-color: rgba(0,0,0,0.08);
+}
+
+.navbar-fire {
+  background: linear-gradient(90deg, #ffffff, #fff7f6);
+}
+
+.navbar-fire .navbar-brand,
+.navbar-fire .nav-link { color: #222; }
+
+.navbar-fire .nav-link.active,
+.navbar-fire .nav-link:hover { color: var(--fire-red); }
+
+.brand-mark {
+  display: inline-flex;
+  width: 1.25rem;
+  height: 1.25rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Buttons */
+.btn-primary {
+  --bs-btn-bg: var(--fire-red);
+  --bs-btn-border-color: var(--fire-red);
+  --bs-btn-hover-bg: var(--fire-red-600);
+  --bs-btn-hover-border-color: var(--fire-red-600);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--fire-amber);
+  --bs-btn-border-color: var(--fire-amber);
+  --bs-btn-hover-bg: var(--fire-amber);
+  --bs-btn-hover-border-color: var(--fire-amber);
+  --bs-btn-hover-color: #0b0d10;
+}
+
+/* Cards and tables */
+.card { background-color: #ffffff; }
+
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-striped-bg: rgba(0,0,0,0.03);
+  --bs-table-hover-bg: rgba(0,0,0,0.05);
+}
+
+.footer-fire { background: #fff7f6; }
+
+/* Forms */
+.form-control, .form-select { background-color: #fff; }
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--fire-red);
+  box-shadow: 0 0 0 .25rem rgba(193, 18, 31, .15);
+}
+
+/* Utility */
+.text-fire { color: var(--fire-amber) !important; }
+.bg-fire { background-color: var(--fire-red) !important; }
+.badge.bg-danger { background-color: var(--fire-red) !important; }
+.badge.bg-success { background-color: #2a9d8f !important; }
+
