@@ -12,6 +12,7 @@ class Pruefungsart(models.Model):
         null=True,
         help_text="Anzahl Monate bis zur nächsten Prüfung (leer lassen, wenn kein Intervall)"
     )
+    geraetekategorie = models.ManyToManyField(Geraetekategorie, verbose_name=("kategorie"))
     
     def __str__(self):
         return self.name

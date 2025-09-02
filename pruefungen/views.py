@@ -35,7 +35,7 @@ def start_pruefung(request, geraet_id):
 
         return redirect('pruefungen:bearbeite', pruefung_id=pruefung.id)   # type: ignore
 
-    arten = Pruefungsart.objects.all()
+    arten = Pruefungsart.objects.filter(geraetekategorie=geraet.kategorie)
     return render(request, 'pruefungen/start_pruefung.html', {'geraet': geraet, 'arten': arten})
 
 
