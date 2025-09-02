@@ -34,7 +34,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Create static directory
-RUN mkdir -p /app/static
+RUN mkdir -p /app/staticfiles
 
 # Expose port
 EXPOSE 8000
