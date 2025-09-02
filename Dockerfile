@@ -16,15 +16,10 @@ RUN apt-get update \
         libcairo2-dev \
         libpango-1.0-0 \
         libpango1.0-dev \
-        libgdk-pixbuf2.0-0 \
-        libgdk-pixbuf2.0-dev \
+        libgdk-pixbuf-xlib-2.0-0 \
+        libgdk-pixbuf-xlib-2.0-dev \
         libffi-dev \
-        libgobject-2.0-0 \
-        libgobject-introspection \
-        libxml2 \
-        libxslt1.1 \
         pkg-config \
-        shared-mime-info \
         gcc \
         g++ \
         libjpeg-dev \

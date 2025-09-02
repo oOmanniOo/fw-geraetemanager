@@ -16,8 +16,8 @@ RUN apt-get update \
         libcairo2-dev \
         libpango-1.0-0 \
         libpango1.0-dev \
-        libgdk-pixbuf2.0-0 \
-        libgdk-pixbuf2.0-dev \
+        libgdk-pixbuf-xlib-2.0-0 \
+        libgdk-pixbuf-xlib-2.0-dev \
         libffi-dev \
         pkg-config \
         gcc \
