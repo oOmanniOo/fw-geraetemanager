@@ -27,9 +27,18 @@
         <div class="text-muted small">Prüfungsart</div>
         <div class="fw-semibold">{{ object.art.name }}</div>
       </div>
+
+      <div class="col-md-6">
+        <div class="text-muted small">Identikation</div>
+        <div class="fw-semibold">{{ object.geraet.identifikation | default:'—' }}</div>
+      </div>
       <div class="col-md-6">
         <div class="text-muted small">Prüfungsdatum</div>
         <div class="fw-semibold">{{ object.datum|date:"d.m.Y" }}</div>
+      </div>
+      <div class="col-md-6">
+        <div class="text-muted small">Barcode</div>
+        <div class="fw-semibold">{{ object.geraet.barcode |default:'—' }}</div>
       </div>
       <div class="col-md-6">
         <div class="text-muted small">Prüfer</div>

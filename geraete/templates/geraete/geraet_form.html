@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 {% block title %}Gerät bearbeiten{% endblock %}
 {% block content %}
-<h2 class="mb-3">Gerät erfassen/bearbeiten</h2>
-<form method="post" class="card card-body">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <div class="d-flex gap-2">
-    <button type="submit" class="btn btn-primary">Speichern</button>
-    <a href="{% url 'geraete:liste' %}" class="btn btn-secondary">Zurück</a>
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h2 class="card-title mb-3">Gerät erfassen / bearbeiten</h2>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Speichern</button>
+        <a href="{% url 'geraete:liste' %}" class="btn btn-secondary">Zurück</a>
+      </div>
+    </form>
   </div>
-</form>
+</div>
 {% endblock %}

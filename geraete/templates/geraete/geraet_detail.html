@@ -21,10 +21,17 @@
         <div class="fw-semibold">{{ object.seriennummer|default:'—' }}</div>
       </div>
       <div class="col-md-6">
+        <div class="text-muted small">Barcode</div>
+        <div class="fw-semibold">{{ object.barcode|default:'—' }}</div>
+      </div>
+        <div class="col-md-6">
+          <div class="text-muted small">Kategorie</div>
+          <div class="fw-semibold">{{ object.kategorie|default:'—' }}</div>
+        </div>
+      <div class="col-md-6">
         <div class="text-muted small">Fahrzeug</div>
         <div class="fw-semibold">{{ object.fahrzeug.bezeichnung|default:'—' }}</div>
       </div>
-
       <div class="col-md-6">
         <div class="text-muted small">Geräteraum</div>
         <div class="fw-semibold">{{ object.geraeteraum.bezeichnung|default:'—' }}</div>

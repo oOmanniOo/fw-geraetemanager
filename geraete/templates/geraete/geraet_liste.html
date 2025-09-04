@@ -6,6 +6,38 @@
   <a href="{% url 'geraete:neu' %}" class="btn btn-primary">Neues Gerät</a>
 </div>
 
+<div class="card mb-3 shadow-sm">
+  <div class="card-body">
+    <form method="get" class="row g-2 align-items-center">
+      <!-- Suchfeld -->
+      <div class="col-md-6">
+        <input type="text" name="q" value="{{ request.GET.q }}" 
+               placeholder="🔍 Suche nach Barcode, Bezeichnung, Identifikation"
+               class="form-control">
+      </div>
+
+      <!-- Kategorie-Filter -->
+      <div class="col-md-4">
+        <select name="kategorie" class="form-select">
+          <option value="">-- Alle Kategorien --</option>
+          {% for kat in kategorien %}
+            <option value="{{ kat.id }}" {% if request.GET.kategorie == kat.id|stringformat:"s" %}selected{% endif %}>
+              {{ kat.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Button -->
+      <div class="col-md-2 text-end">
+        <button type="submit" class="btn btn-primary w-100">
+          Filtern
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 {% if geraete %}
   <div class="table-responsive">
     <table class="table table-striped table-hover align-middle">
@@ -13,6 +45,8 @@
         <tr>
           <th>Gerät</th>
           <th>Identifikation</th>
+          <th>Barcode</th>
+          <th>Kategorie</th>
           <th>Fahrzeug/Geräteraum</th>
           <th>Status</th>
           <th class="text-end">Aktionen</th>
@@ -25,6 +59,8 @@
               <a href="{% url 'geraete:detail' g.pk %}">{{ g.bezeichnung }}</a>
             </td>
             <td class="text-muted">{{ g.identifikation }}</td>
+            <td class="text-muted">{{ g.barcode | default:"—"}}</td>
+            <td class="text-muted">{{ g.kategorie | default:"—"}}</td>
             <td>
               {% if g.fahrzeug %}
                 <div class="fw-semibold">{{ g.fahrzeug.bezeichnung }}</div>
@@ -32,14 +68,14 @@
                   <div class="text-muted small">{{ g.geraeteraum.bezeichnung }}</div>
                 {% endif %}
               {% elif g.geraeteraum %}
-                <div class="text-muted small">{{ g.geraeteraum.bezeichnung }}</div>
+                <div class="text-muted small">{{ g.geraeteraum.bezeichnung }}</div> 
               {% else %}
                 <span class="text-muted">—</span>
               {% endif %}
             </td>
             <td>
               {% if g.status %}
-                <span class="badge bg-success">{{ g.status }}</span>
+                <span class="badge bg-success">{{ g.status.name }}</span>
               {% else %}
                 <span class="badge bg-secondary">—</span>
               {% endif %}
@@ -52,6 +88,7 @@
       </tbody>
     </table>
   </div>
+  {% include "include/pagination.html" %}
 {% else %}
   <div class="alert alert-info">Keine Geräte vorhanden.</div>
 {% endif %}
