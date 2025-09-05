@@ -140,5 +140,5 @@ def pruefung_pdf(request, pk):
     pdf = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
 
     response = HttpResponse(pdf, content_type="application/pdf")
-    response["Content-Disposition"] = f'attachment; filename="pruefung_{pruefung.id}.pdf"'  # type: ignore
+    response["Content-Disposition"] = f'attachment; filename="{pruefung.geraet.bezeichnung}_{pruefung.geraet.barcode}_{pruefung.art.name}_{pruefung.datum}.pdf"'  # type: ignore
     return response
