@@ -3,10 +3,8 @@ services:
     image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_DB=fwmanager
-      - POSTGRES_USER=fwmanager
-      - POSTGRES_PASSWORD=fwmanager_password
+    env_file:
+        - .env
     ports:
       - "5432:5432"
     restart: unless-stopped
@@ -19,11 +17,8 @@ services:
       - "8000:8000"
     volumes:
       - static_volume:/app/staticfiles
-    environment:
-      - DEBUG=False
-      - SECRET_KEY=your-production-secret-key-here
-      - ALLOWED_HOSTS=localhost,127.0.0.1,your-domain.com,*
-      - DATABASE_URL=postgres://fwmanager:fwmanager_password@db:5432/fwmanager
+    env_file:
+    - .env
     depends_on:
       - db
     command: >
