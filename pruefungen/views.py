@@ -187,7 +187,7 @@ class FeueronListView(ListView):
         art_filter = self.request.GET.get('art')
         bestanden_filter = self.request.GET.get('bestanden')
 
-        queryset = Pruefung.objects.filter(feueron=True)
+        queryset = Pruefung.objects.filter(feueron=False)
 
         if geraet_filter:
             queryset = queryset.filter(geraet__bezeichnung__icontains=geraet_filter)

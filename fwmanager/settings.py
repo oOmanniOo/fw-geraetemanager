@@ -12,12 +12,12 @@ env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY", default="acvkljweerölaksdcwrij")
+SECRET_KEY = env("SECRET_KEY", default="acvkljweerölaksdcwrij") # type: ignore
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG", default=False)
+DEBUG = env("DEBUG", default=False) # type: ignore
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"]) # type: ignore
 
 
 # Application definition
@@ -69,13 +69,13 @@ WSGI_APPLICATION = 'fwmanager.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 # Check if DATABASE_URL is set (for production)
-DATABASE_URL = env('DATABASE_URL', default=None)
+DATABASE_URL = env('DATABASE_URL', default=None) # type: ignore
 
 if DATABASE_URL:
     # Production: Use PostgreSQL
     import dj_database_url
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL)
+        'default': dj_database_url.parse(DATABASE_URL) # type: ignore
     }
 else:
     # Development: Use SQLite
