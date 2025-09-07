@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Prüfungsübersicht</h2>
+
+<!-- Filter-Bereich -->
+<div class="card mb-4">
+  <div class="card-body">
+    <h3 class="h5 mb-3">Filter</h3>
+    <form method="get">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label for="geraet" class="form-label">Gerät</label>
+          <input type="text" id="geraet" name="geraet" value="{{ current_geraet_filter }}" placeholder="Gerätename eingeben" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label for="art" class="form-label">Prüfungsart</label>
+          <select id="art" name="art" class="form-select">
+            <option value="">Alle Arten</option>
+            {% for art in arten %}
+            <option value="{{ art.id }}" {% if current_art_filter == art.id|stringformat:"s" %}selected{% endif %}>{{ art.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="bestanden" class="form-label">Status</label>
+          <select id="bestanden" name="bestanden" class="form-select">
+            <option value="">Alle</option>
+            <option value="true" {% if current_bestanden_filter == 'true' %}selected{% endif %}>Bestanden</option>
+            <option value="false" {% if current_bestanden_filter == 'false' %}selected{% endif %}>Nicht bestanden</option>
+          </select>
+        </div>
+        <div class="col-md-2 d-grid d-md-flex gap-2">
+          <button type="submit" class="btn btn-primary">Filtern</button>
+          <a href="{% url 'pruefungen:uebersicht' %}" class="btn btn-secondary">Zurücksetzen</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Prüfungsliste -->
+{% if pruefungen %}
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Gerät</th>
+          <th>Prüfungsart</th>
+          <th>Prüfer</th>
+          <th>Status</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for pruefung in pruefungen %}
+        <tr>
+          <td>{{ pruefung.datum|date:"d.m.Y" }}</td>
+          <td><a href="{% url 'geraete:detail' pruefung.geraet.pk %}">{{ pruefung.geraet.bezeichnung }}</a></td>
+          <td>{{ pruefung.art.name }}</td>
+          <td>{{ pruefung.pruefer }}</td>
+          <td>
+            {% if pruefung.bestanden %}
+              <span class="badge bg-success">Bestanden</span>
+            {% else %}
+              <span class="badge bg-danger">Nicht bestanden</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'pruefungen:detail' pruefung.pk %}" class="btn btn-sm btn-outline-primary">Detail</a>
+            <a href="{% url 'pruefungen:bearbeite' pruefung.pk %}" class="btn btn-sm btn-outline-primary">Bearbeiten</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% include "include/pagination.html" %}
+
+{% else %}
+  <div class="alert alert-info">Keine Prüfungen gefunden.</div>
+{% endif %}
+{% endblock %}

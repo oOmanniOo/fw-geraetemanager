@@ -39,6 +39,7 @@ class Pruefung(models.Model):
     datum = models.DateField()
     pruefer = models.CharField(max_length=255)
     bestanden = models.BooleanField(null=True, blank=True)
+    feueron = models.BooleanField(default=False)
     bemerkung = models.TextField(blank=True)
 
     def __str__(self):
@@ -58,3 +59,4 @@ class Antwort(models.Model):
     bemerkung = models.TextField(blank=True)
     class Meta:
         unique_together = ('pruefung', 'punkt')
+

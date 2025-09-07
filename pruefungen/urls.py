@@ -9,4 +9,5 @@ urlpatterns = [
      path('bearbeite/<int:pruefung_id>/', views.bearbeite_pruefung, name='bearbeite'),
      path('<int:pk>/', views.PruefungDetailView.as_view(), name='detail'),
      path('<int:pk>/pdf/', views.pruefung_pdf, name='pdf'),
+     path('feueron/', views.FeueronListView.as_view(), name='feueron'),
 ]

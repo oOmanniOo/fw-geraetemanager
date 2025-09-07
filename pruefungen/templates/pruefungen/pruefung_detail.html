@@ -27,7 +27,6 @@
         <div class="text-muted small">Prüfungsart</div>
         <div class="fw-semibold">{{ object.art.name }}</div>
       </div>
-
       <div class="col-md-6">
         <div class="text-muted small">Identikation</div>
         <div class="fw-semibold">{{ object.geraet.identifikation | default:'—' }}</div>
@@ -41,9 +40,24 @@
         <div class="fw-semibold">{{ object.geraet.barcode |default:'—' }}</div>
       </div>
       <div class="col-md-6">
+        <div class="text-muted small">Seriennummer</div>
+        <div class="fw-semibold">{{ object.geraet.seriennummer |default:'—' }}</div>
+      </div>
+      <div class="col-md-6">
         <div class="text-muted small">Prüfer</div>
         <div class="fw-semibold">{{ object.pruefer|default:'—' }}</div>
       </div>
+      {% if object.feueron %}
+        <div class="col-md-6">
+          <div class="text-muted small">Feueron Eintrag</div>
+          <div class="fw-semibold">erledigt</div>
+        </div>
+      {% else %}  
+        <div class="col-md-6">
+          <div class="text-muted small">Feueron Eintrag</div>
+          <div class="fw-semibold text-danger">offen</div>
+        </div>
+      {% endif %}
       <div class="col-12">
         <div class="text-muted small">Status</div>
         <div>

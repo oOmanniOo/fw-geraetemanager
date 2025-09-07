@@ -22,11 +22,21 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav ms-auto">
-                        <a class="nav-link" href="{% url 'geraete:liste' %}">Geräte</a>
-                        <a class="nav-link" href="{% url 'fahrzeuge:liste' %}">Fahrzeuge</a>
-                        <a class="nav-link" href="{% url 'pruefungen:uebersicht' %}">Prüfungen</a>
-                    </div>
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="{% url 'geraete:liste' %}">Geräte</a>
+                    <a class="nav-link" href="{% url 'fahrzeuge:liste' %}">Fahrzeuge</a>
+
+                    <!-- Dropdown für Prüfungen -->
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pruefungenDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Prüfungen
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="pruefungenDropdown">
+                        <li><a class="dropdown-item" href="{% url 'pruefungen:uebersicht' %}">Übersicht</a></li>
+                        <li><a class="dropdown-item" href="{% url 'pruefungen:feueron' %}">FeuerON</a></li>
+                    </ul>
+                    </li>
+                </div>
                 </div>
             </div>
         </nav>

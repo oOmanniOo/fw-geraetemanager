@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.utils import timezone
 from datetime import datetime
 from .models import Pruefung, Pruefungsart, Checkliste, Antwort
@@ -58,6 +58,12 @@ def bearbeite_pruefung(request, pruefung_id):
         allgemeine_bemerkung = request.POST.get('allgemeine_bemerkung')
         if allgemeine_bemerkung is not None:
             pruefung.bemerkung = allgemeine_bemerkung
+
+        feueron = request.POST.get('feueron')
+        if feueron:
+            pruefung.feueron = True
+        else:
+            pruefung.feueron = False
         
         # Checklistenpunkte verarbeiten
         antworten = pruefung.antworten.all()  # type: ignore
@@ -79,7 +85,12 @@ def bearbeite_pruefung(request, pruefung_id):
             pruefung.bestanden = bestanden
         
         pruefung.save()
-        return redirect('geraete:detail', pk=pruefung.geraet.id)    # type: ignore
+        
+        next_url = request.POST.get("next")
+        if next_url:
+            return redirect(next_url)
+        return redirect("pruefungen:uebersicht")
+        ##return redirect('geraete:detail', pk=pruefung.geraet.id)    # type: ignore
 
     return render(request, 'pruefungen/bearbeite_pruefung.html', {'pruefung': pruefung})
 
@@ -142,3 +153,52 @@ def pruefung_pdf(request, pk):
     response = HttpResponse(pdf, content_type="application/pdf")
     response["Content-Disposition"] = f'attachment; filename="{pruefung.geraet.bezeichnung}_{pruefung.geraet.barcode}_{pruefung.art.name}_{pruefung.datum}.pdf"'  # type: ignore
     return response
+
+class FeueronListView(ListView):
+    model = Pruefung
+    template_name = 'pruefungen/pruefung_feueron_liste.html'
+    context_object_name = 'pruefungen'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Alle Prüfungsarten für das Dropdown-Menü
+        context['arten'] = Pruefungsart.objects.all().order_by('name')
+        
+        # Aktuelle Filter-Werte für die Form
+        context['current_geraet_filter'] = self.request.GET.get('geraet', '')
+        context['current_art_filter'] = self.request.GET.get('art', '')
+        context['current_bestanden_filter'] = self.request.GET.get('bestanden', '')
+        
+        # Optional: Die aktuell ausgewählte Prüfungsart als Objekt
+        art_filter = self.request.GET.get('art')
+        if art_filter:
+            try:
+                context['selected_pruefungsart'] = Pruefungsart.objects.get(id=art_filter)
+            except Pruefungsart.DoesNotExist:
+                context['selected_pruefungsart'] = None
+        else:
+            context['selected_pruefungsart'] = None
+            
+        return context
+
+    def get_queryset(self):
+        geraet_filter = self.request.GET.get('geraet')
+        art_filter = self.request.GET.get('art')
+        bestanden_filter = self.request.GET.get('bestanden')
+
+        queryset = Pruefung.objects.filter(feueron=True)
+
+        if geraet_filter:
+            queryset = queryset.filter(geraet__bezeichnung__icontains=geraet_filter)
+
+        if art_filter:
+            queryset = queryset.filter(art_id=art_filter)
+
+        if bestanden_filter:
+            if bestanden_filter.lower() in ['true']:
+                queryset = queryset.filter(bestanden=True)
+            elif bestanden_filter.lower() in ['false']:
+                queryset = queryset.filter(bestanden=False)
+
+        return queryset.order_by('-datum')

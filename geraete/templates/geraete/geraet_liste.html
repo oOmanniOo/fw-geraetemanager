@@ -81,7 +81,8 @@
               {% endif %}
             </td>
             <td class="text-end">
-              <a href="{% url 'geraete:bearbeiten' g.pk %}" class="btn btn-sm btn-outline-primary">Bearbeiten</a>
+              <a href="{% url 'geraete:detail' g.pk %}" class="btn btn-sm btn-outline-primary">Detail</a>
+              <a href="{% url 'pruefungen:start' g.id %}" class="btn btn-sm btn-danger">Prüfung starten</a>
             </td>
           </tr>
         {% endfor %}

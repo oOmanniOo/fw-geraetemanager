@@ -132,7 +132,7 @@
   <div class="page">
     <div class="header">
       <div>
-        <h1 class="title">Prüfungsbericht</h1>
+        <h1 class="title">Prüfungbericht {{ object.geraet.bezeichnung }}</h1>
         <div class="subtitle">{{ object.art.name }} · {{ object.datum|date:"d.m.Y" }}</div>
       </div>
       <div>
@@ -148,6 +148,14 @@
       <div>
         <div class="label">Gerät</div>
         <div class="value">{{ object.geraet.bezeichnung }}</div>
+      </div>
+      <div>
+        <div class="label">Barcode:</div>
+        <div class="value">{{ object.geraet.barcode|default:'—'}}</div>
+      </div>
+      <div>
+        <div class="label">Seriennummer:</div>
+        <div class="value">{{ object.geraet.seriennummer|default:'—'}}</div>
       </div>
       <div>
         <div class="label">Prüfungsart</div>
@@ -213,7 +221,7 @@
                 {% if antwort.ok %}
                   <span style="color: var(--ok); font-weight: 700;">OK</span>
                 {% else %}
-                  <span style="color: var(--error); font-weight: 700;">Fehler</span>
+                  <span style="color: var(--error); font-weight: 700;">Nicht Ok</span>
                 {% endif %}
               </td>
               <td>
@@ -230,15 +238,6 @@
     {% else %}
       <div class="muted">Keine Prüfpunkte vorhanden.</div>
     {% endif %}
-
-    <div class="signature">
-      <div class="sig-box">
-        <div class="muted">Unterschrift Prüfer</div>
-      </div>
-      <div class="sig-box">
-        <div class="muted">Unterschrift Verantwortliche/r</div>
-      </div>
-    </div>
 
     <div class="foot">
       <div>Gerätemanager · Prüfungs-ID: {{ object.id }}</div>
