@@ -24,11 +24,12 @@ RUN apt-get update \
         g++ \
         libjpeg-dev \
         zlib1g-dev \
+        libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt gunicorn psycopg2-binary
 
 # Copy project
 COPY . .
@@ -39,9 +40,14 @@ RUN mkdir -p /app/staticfiles
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
+# Create non-root user
+RUN adduser --disabled-password --gecos '' appuser
+RUN chown -R appuser:appuser /app
+USER appuser
+
 # Expose port
 EXPOSE 8000
 
-# Run the application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Run the application with Gunicorn
+CMD ["gunicorn", "fwmanager.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
 
