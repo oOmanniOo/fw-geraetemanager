@@ -19,19 +19,25 @@ def start_pruefung(request, geraet_id):
         art = get_object_or_404(Pruefungsart, id=art_id)
         checkliste = Checkliste.objects.filter(art=art, kategorie=geraet.kategorie).first()
 
-        # Prüfung anlegen
+        # Prüfung anlegen (Datum als date, nicht datetime)
         pruefung = Pruefung.objects.create(
             geraet=geraet,
             art=art,
-            datum=timezone.now(),
+            datum=timezone.now().date(),
             pruefer=request.user.username if request.user.is_authenticated else 'Unbekannt',
             bestanden=None  # wird später berechnet
         )
 
-        # Antworten vorbereiten
-        if checkliste:    
+        # Antworten vorbereiten: punkt_name und is_pflicht übernehmen
+        if checkliste:
             for punkt in checkliste.punkte.all():   # type: ignore
-                Antwort.objects.create(pruefung=pruefung, punkt=punkt, ok=False)
+                Antwort.objects.create(
+                    pruefung=pruefung,
+                    punkt=punkt,
+                    punkt_name=punkt.name,
+                    is_pflicht=punkt.ist_pflicht,
+                    ok=False
+                )
 
         return redirect('pruefungen:bearbeite', pruefung_id=pruefung.id)   # type: ignore
 
@@ -59,38 +65,36 @@ def bearbeite_pruefung(request, pruefung_id):
         if allgemeine_bemerkung is not None:
             pruefung.bemerkung = allgemeine_bemerkung
 
-        feueron = request.POST.get('feueron')
-        if feueron:
-            pruefung.feueron = True
-        else:
-            pruefung.feueron = False
+        # Checkbox aus POST: existenz prüfen
+        pruefung.feueron = request.POST.get('feueron') == 'on'
         
         # Checklistenpunkte verarbeiten
         antworten = pruefung.antworten.all()  # type: ignore
         if antworten.exists():
             bestanden = True
-            for antwort in pruefung.antworten.all():   # type: ignore
+            for antwort in antworten:   # type: ignore
                 ok = request.POST.get(f'punkt_{antwort.id}') == 'on'
                 bemerkung = request.POST.get(f'bemerkung_{antwort.id}', '')
                 antwort.ok = ok
                 antwort.bemerkung = bemerkung
+                # sicherstellen, dass punkt_name/is_pflicht erhalten bleiben bzw. aktualisiert werden
+                if antwort.punkt:
+                    antwort.punkt_name = antwort.punkt.name
+                    antwort.is_pflicht = antwort.punkt.ist_pflicht
                 antwort.save()
-                if not ok and antwort.punkt.ist_pflicht:
+                # Pflicht prüfen: falls punkt gelöscht -> fallback auf gespeichertes is_pflicht
+                pflicht = (antwort.punkt.ist_pflicht if antwort.punkt else antwort.is_pflicht)
+                if not ok and pflicht:
                     bestanden = False
             pruefung.bestanden = bestanden
-        
         else:
             # keine Checkliste -> manueller Status
-            bestanden = request.POST.get('manuell_bestanden') == 'on'
-            pruefung.bestanden = bestanden
+            pruefung.bestanden = request.POST.get('manuell_bestanden') == 'on'
         
         pruefung.save()
         
-        next_url = request.POST.get("next")
-        if next_url:
-            return redirect(next_url)
-        return redirect("pruefungen:uebersicht")
-        ##return redirect('geraete:detail', pk=pruefung.geraet.id)    # type: ignore
+
+        return redirect("geraete:detail", pk=pruefung.geraet.id)   # type: ignore
 
     return render(request, 'pruefungen/bearbeite_pruefung.html', {'pruefung': pruefung})
 
