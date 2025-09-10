@@ -212,8 +212,8 @@
           {% for antwort in object.antworten.all %}
             <tr>
               <td>
-                {{ antwort.punkt.name }}
-                {% if antwort.punkt.ist_pflicht %}
+                {{ antwort.punkt_name }}
+                {% if antwort.is_pflicht %}
                   <span class="req" aria-label="Pflicht">*</span>
                 {% endif %}
               </td>

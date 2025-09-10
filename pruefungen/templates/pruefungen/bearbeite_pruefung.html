@@ -1,109 +1,108 @@
 {% extends "base.html" %}
+{% block title %}Prüfung bearbeiten{% endblock %}
+
 {% block content %}
-<h2 class="mb-4">
-  Prüfung bearbeiten: {{ pruefung.geraet.name }} ({{ pruefung.art.name }})
-</h2>
+<div class="container">
+  <h2>Prüfung bearbeiten</h2>
 
-<form method="post" class="mb-4">
-  {% csrf_token %}
-  <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+  <form method="post" class="mt-3">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
 
-  <!-- Prüfungsdetails -->
-  <div class="card mb-4">
-    <div class="card-body">
-      <h3 class="h5 mb-3">Prüfungsdetails</h3>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label for="pruefungsdatum" class="form-label">Prüfungsdatum</label>
-          <input type="date"
-                 id="pruefungsdatum"
-                 name="pruefungsdatum"
-                 value="{{ pruefung.datum|date:'Y-m-d' }}"
-                 class="form-control">
-        </div>
-        <div class="col-md-6">
-          <label for="pruefer" class="form-label">Prüfer</label>
-          <input type="text"
-                 id="pruefer"
-                 name="pruefer"
-                 value="{{ pruefung.pruefer }}"
-                 class="form-control">
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">Gerät</label>
+        <input class="form-control" type="text" value="{{ pruefung.geraet.bezeichnung }}" readonly>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Prüfungsart</label>
+        <input class="form-control" type="text" value="{{ pruefung.art.name }}" readonly>
+      </div>
+      <div class="col-md-4">
+        <label for="pruefungsdatum" class="form-label">Datum</label>
+        <input id="pruefungsdatum" name="pruefungsdatum" class="form-control" type="date"
+               value="{{ pruefung.datum|date:'Y-m-d' }}">
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="pruefer" class="form-label">Prüfer</label>
+        <input id="pruefer" name="pruefer" class="form-control" value="{{ pruefung.pruefer }}">
+      </div>
+      <div class="col-md-6 d-flex align-items-end">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="feueron" name="feueron"
+                 {% if pruefung.feueron %}checked{% endif %}>
+          <label class="form-check-label" for="feueron">Feueron</label>
         </div>
       </div>
+    </div>
 
-      <!-- FeuerON -->
-      <div class="form-check mt-3">
+    <div class="mb-4">
+      <label for="allgemeine_bemerkung" class="form-label">Allgemeine Bemerkung</label>
+      <textarea id="allgemeine_bemerkung" name="allgemeine_bemerkung" class="form-control" rows="3">{{ pruefung.bemerkung }}</textarea>
+    </div>
+
+    <hr>
+
+    {% if pruefung.antworten.exists %}
+      <h3 class="h5 mb-3">Prüfpunkte</h3>
+      <div class="table-responsive mb-3">
+        <table class="table table-striped align-middle">
+          <thead>
+            <tr>
+              <th>Prüfpunkt</th>
+              <th class="text-center">OK?</th>
+              <th>Bemerkung</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for antwort in pruefung.antworten.all %}
+            <tr>
+              <td>
+                {{ antwort.punkt_name }}
+                {% if antwort.is_pflicht %}
+                  <span class="text-danger">*</span>
+                {% endif %}
+                {% if not antwort.punkt %}
+                  <span class="text-muted">(gelöscht)</span>
+                {% endif %}
+              </td>
+              <td class="text-center">
+                <input type="checkbox"
+                       class="form-check-input"
+                       name="punkt_{{ antwort.id }}"
+                       {% if antwort.ok %}checked{% endif %}>
+              </td>
+              <td>
+                <input type="text"
+                       class="form-control"
+                       name="bemerkung_{{ antwort.id }}"
+                       value="{{ antwort.bemerkung }}">
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="form-check mb-3">
         <input class="form-check-input"
                type="checkbox"
-               id="feueron"
-               name="feueron"
-               value="True"
-               {% if pruefung.feueron %}checked{% endif %}>
-        <label class="form-check-label" for="feueron">
-          FeuerON eingetragen
+               id="manuell_bestanden"
+               name="manuell_bestanden"
+               {% if pruefung.bestanden %}checked{% endif %}>
+        <label class="form-check-label" for="manuell_bestanden">
+          Prüfung bestanden
         </label>
       </div>
+    {% endif %}
 
-      <!-- Allgemeine Bemerkung -->
-      <div class="mt-3">
-        <label for="allgemeine_bemerkung" class="form-label">Allgemeine Bemerkung zur Prüfung</label>
-        <textarea id="allgemeine_bemerkung"
-                  name="allgemeine_bemerkung"
-                  rows="3"
-                  class="form-control">{{ pruefung.bemerkung }}</textarea>
-      </div>
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary">Speichern</button>
+      <a href="{% url 'pruefungen:uebersicht' %}" class="btn btn-secondary">Abbrechen</a>
     </div>
-  </div>
-
-  <!-- Prüfpunkte -->
-  {% if pruefung.antworten.exists %}
-    <h3 class="h5 mb-3">Prüfpunkte</h3>
-    <div class="table-responsive mb-3">
-      <table class="table table-striped align-middle">
-        <thead>
-          <tr>
-            <th>Prüfpunkt</th>
-            <th class="text-center">OK?</th>
-            <th>Bemerkung</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for antwort in pruefung.antworten.all %}
-          <tr>
-            <td>
-              {{ antwort.punkt.name }}
-              {% if antwort.punkt.ist_pflicht %}<span class="text-danger">*</span>{% endif %}
-            </td>
-            <td class="text-center">
-              <input type="checkbox"
-                     class="form-check-input"
-                     name="punkt_{{ antwort.id }}"
-                     {% if antwort.ok %}checked{% endif %}>
-            </td>
-            <td>
-              <input type="text"
-                     class="form-control"
-                     name="bemerkung_{{ antwort.id }}"
-                     value="{{ antwort.bemerkung }}">
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  {% else %}
-    <div class="form-check mb-3">
-      <input class="form-check-input"
-             type="checkbox"
-             id="manuell_bestanden"
-             name="manuell_bestanden"
-             {% if pruefung.bestanden %}checked{% endif %}>
-      <label class="form-check-label" for="manuell_bestanden">
-        Prüfung bestanden
-      </label>
-    </div>
-  {% endif %}
-
-  <button type="submit" class="btn btn-primary">Prüfung speichern</button>
-</form>
+  </form>
+</div>
 {% endblock %}
