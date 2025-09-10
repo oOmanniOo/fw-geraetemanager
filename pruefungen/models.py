@@ -54,7 +54,9 @@ class Pruefung(models.Model):
 
 class Antwort(models.Model):
     pruefung = models.ForeignKey(Pruefung, on_delete=models.CASCADE, related_name='antworten')
-    punkt = models.ForeignKey(Checklistenpunkt, on_delete=models.CASCADE)
+    punkt = models.ForeignKey(Checklistenpunkt, on_delete=models.SET_NULL, null=True)
+    punkt_name = models.CharField(max_length=255)
+    is_pflicht = models.BooleanField(default=True)
     ok = models.BooleanField(default=False)
     bemerkung = models.TextField(blank=True)
     class Meta:
