@@ -4,12 +4,75 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.views.generic import DetailView, ListView
 from django.utils import timezone
-from datetime import datetime
+from datetime import date, datetime
 from .models import Pruefung, Pruefungsart, Checkliste, Antwort
 from geraete.models import Geraet
 
 from weasyprint import HTML
 
+def anstehende_pruefungen(request):
+    naechste_pruefungen_dict = {}
+    today = date.today()
+
+    # Filter queryset based on GET parameters
+    geraet_filter = request.GET.get('geraet')
+    art_filter = request.GET.get('art')
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
+
+    alle_pruefungen = Pruefung.objects.select_related('geraet', 'art').order_by('datum')
+
+    if geraet_filter:
+        alle_pruefungen = alle_pruefungen.filter(geraet__bezeichnung__icontains=geraet_filter)
+    
+    if art_filter:
+        alle_pruefungen = alle_pruefungen.filter(art_id=art_filter)
+
+    for pruefung in alle_pruefungen:
+        naechste = pruefung.naechste_pruefung
+        if naechste:
+            key = (pruefung.geraet.id, pruefung.art.id)
+            naechste_pruefungen_dict[key] = {
+                'geraet_name': pruefung.geraet.bezeichnung,
+                'geraet_id': pruefung.geraet.id,
+                'art_name': pruefung.art.name,
+                'letzte_pruefung_datum': pruefung.datum,
+                'naechste_pruefung_datum': naechste,
+            }
+
+    anstehende_liste = [p for p in naechste_pruefungen_dict.values() if p['naechste_pruefung_datum'] >= today]
+
+    # Date range filtering
+    start_date = None
+    if start_date_str:
+        try:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+            anstehende_liste = [p for p in anstehende_liste if p['naechste_pruefung_datum'] >= start_date]
+        except ValueError:
+            pass # Ignore invalid date format
+
+    end_date = None
+    if end_date_str:
+        try:
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+            anstehende_liste = [p for p in anstehende_liste if p['naechste_pruefung_datum'] <= end_date]
+        except ValueError:
+            pass # Ignore invalid date format
+
+    anstehende_liste.sort(key=lambda p: p['naechste_pruefung_datum'])
+
+    arten = Pruefungsart.objects.all()
+
+    context = {
+        'anstehende_pruefungen': anstehende_liste,
+        'arten': arten,
+        'geraet_filter': geraet_filter,
+        'art_filter': art_filter,
+        'start_date': start_date_str,
+        'end_date': end_date_str,
+    }
+
+    return render(request, 'pruefungen/anstehende_pruefungen.html', context)
 
 def start_pruefung(request, geraet_id):
     geraet = get_object_or_404(Geraet, id=geraet_id)

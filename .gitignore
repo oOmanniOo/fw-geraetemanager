@@ -165,3 +165,6 @@ media/
 # Static files (if collected)
 staticfiles/
 static/
+
+GEMINI.md
+GEMINI/
