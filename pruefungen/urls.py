@@ -10,4 +10,5 @@ urlpatterns = [
      path('<int:pk>/', views.PruefungDetailView.as_view(), name='detail'),
      path('<int:pk>/pdf/', views.pruefung_pdf, name='pdf'),
      path('feueron/', views.FeueronListView.as_view(), name='feueron'),
+     path('anstehende/', views.anstehende_pruefungen, name='anstehende'),
 ]

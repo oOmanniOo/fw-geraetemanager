@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Anstehende Prüfungen{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Anstehende Prüfungen</h2>
+
+<!-- Filter Form -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3 align-items-center">
+            <div class="col-md-4">
+                <label for="geraet" class="visually-hidden">Gerät</label>
+                <input type="text" class="form-control" name="geraet" id="geraet" placeholder="Gerätename..." value="{{ geraet_filter|default:'' }}">
+            </div>
+            <div class="col-md-4">
+                <label for="art" class="visually-hidden">Prüfungsart</label>
+                <select name="art" id="art" class="form-select">
+                    <option value="">Alle Prüfungsarten</option>
+                    {% for art in arten %}
+                        <option value="{{ art.id }}" {% if art_filter == art.id|stringformat:"s" %}selected{% endif %}>{{ art.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="start_date" class="visually-hidden">Startdatum</label>
+                <input type="date" class="form-control" name="start_date" id="start_date" value="{{ start_date|default:'' }}">
+            </div>
+            <div class="col-md-2">
+                <label for="end_date" class="visually-hidden">Enddatum</label>
+                <input type="date" class="form-control" name="end_date" id="end_date" value="{{ end_date|default:'' }}">
+            </div>
+            <div class="col-md-12 d-grid">
+                <button type="submit" class="btn btn-primary">Filtern</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    {% if anstehende_pruefungen %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Gerät</th>
+              <th>Prüfungsart</th>
+              <th>Letzte Prüfung am</th>
+              <th>Nächste Prüfung am</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pruefung in anstehende_pruefungen %}
+              <tr>
+                <td>
+                  <a href="{% url 'geraete:detail' pruefung.geraet_id %}">
+                    {{ pruefung.geraet_name }}
+                  </a>
+                </td>
+                <td>{{ pruefung.art_name }}</td>
+                <td>{{ pruefung.letzte_pruefung_datum|date:"d.m.Y" }}</td>
+                <td class="fw-semibold">{{ pruefung.naechste_pruefung_datum|date:"d.m.Y" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-info mb-0">
+        Aktuell liegen keine Prüfungen an.
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
