@@ -56,7 +56,7 @@
         {% for pruefung in pruefungen %}
         <tr>
           <td>{{ pruefung.datum|date:"d.m.Y" }}</td>
-          <td><a href="{% url 'geraete:detail' pruefung.geraet.pk %}">{{ pruefung.geraet.bezeichnung }}</a></td>
+          <td><a href="{% url 'geraete:detail' pruefung.geraet.pk %}">{{ pruefung.geraet.identifikation }}</a></td>
           <td>{{ pruefung.art.name }}</td>
           <td>{{ pruefung.pruefer }}</td>
           <td>
