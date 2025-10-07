@@ -21,7 +21,7 @@ class Geraet(models.Model):
     seriennummer = models.CharField(max_length=100, blank=True, null=True)
     barcode = models.CharField(max_length=100, unique=True, blank=True, null=True)
     kategorie = models.ForeignKey(Geraetekategorie, on_delete=models.CASCADE)
-    status = models.ForeignKey(Status, on_delete=models.CASCADE)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True, blank=True)
     fahrzeug = models.ForeignKey(Fahrzeug, on_delete=models.CASCADE, related_name='geraete', default=None, null=True, blank=True)
     geraeteraum = models.ForeignKey(Geraeteraum, on_delete=models.SET_NULL, null=True, blank=True)
     bemerkung = models.TextField(blank=True)
