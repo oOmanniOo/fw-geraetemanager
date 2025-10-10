@@ -23,7 +23,7 @@ def anstehende_pruefungen(request):
     alle_pruefungen = Pruefung.objects.select_related('geraet', 'art').order_by('datum')
 
     if geraet_filter:
-        alle_pruefungen = alle_pruefungen.filter(geraet__bezeichnung__icontains=geraet_filter)
+        alle_pruefungen = alle_pruefungen.filter(geraet__identifikation__icontains=geraet_filter)
     
     if art_filter:
         alle_pruefungen = alle_pruefungen.filter(art_id=art_filter)
@@ -31,10 +31,10 @@ def anstehende_pruefungen(request):
     for pruefung in alle_pruefungen:
         naechste = pruefung.naechste_pruefung
         if naechste:
-            key = (pruefung.geraet.id, pruefung.art.id)
+            key = (pruefung.geraet.id, pruefung.art.id)#type:ignore
             naechste_pruefungen_dict[key] = {
-                'geraet_name': pruefung.geraet.bezeichnung,
-                'geraet_id': pruefung.geraet.id,
+                'geraet_name': pruefung.geraet.identifikation,
+                'geraet_id': pruefung.geraet.id, #type:ignore
                 'art_name': pruefung.art.name,
                 'letzte_pruefung_datum': pruefung.datum,
                 'naechste_pruefung_datum': naechste,
@@ -170,7 +170,7 @@ def pruefungs_uebersicht(request):
     bestanden_filter = request.GET.get('bestanden')
 
     if geraet_filter:
-        pruefungen = pruefungen.filter(geraet__bezeichnung__icontains=geraet_filter)
+        pruefungen = pruefungen.filter(geraet__identifikation__icontains=geraet_filter)
 
     if art_filter:
         pruefungen = pruefungen.filter(art_id=art_filter)
@@ -218,7 +218,7 @@ def pruefung_pdf(request, pk):
     pdf = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
 
     response = HttpResponse(pdf, content_type="application/pdf")
-    response["Content-Disposition"] = f'attachment; filename="{pruefung.geraet.bezeichnung}_{pruefung.geraet.barcode}_{pruefung.art.name}_{pruefung.datum}.pdf"'  # type: ignore
+    response["Content-Disposition"] = f'attachment; filename="{pruefung.geraet.identifikation}_{pruefung.geraet.barcode}_{pruefung.art.name}_{pruefung.datum}.pdf"'  # type: ignore
     return response
 
 class FeueronListView(ListView):
@@ -257,7 +257,7 @@ class FeueronListView(ListView):
         queryset = Pruefung.objects.filter(feueron=False)
 
         if geraet_filter:
-            queryset = queryset.filter(geraet__bezeichnung__icontains=geraet_filter)
+            queryset = queryset.filter(geraet__identifikation__icontains=geraet_filter)
 
         if art_filter:
             queryset = queryset.filter(art_id=art_filter)

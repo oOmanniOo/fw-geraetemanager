@@ -20,16 +20,16 @@
   <div class="card-body">
     <div class="row g-3">
       <div class="col-md-6">
-        <div class="text-muted small">Gerät</div>
-        <div class="fw-semibold">{{ object.geraet.bezeichnung }}</div>
+        <div class="text-muted small">Identikation</div>
+        <div class="fw-semibold">{{ object.geraet.identifikation }}</div>
       </div>
       <div class="col-md-6">
         <div class="text-muted small">Prüfungsart</div>
         <div class="fw-semibold">{{ object.art.name }}</div>
       </div>
       <div class="col-md-6">
-        <div class="text-muted small">Identikation</div>
-        <div class="fw-semibold">{{ object.geraet.identifikation | default:'—' }}</div>
+        <div class="text-muted small">Bezeichnung</div>
+        <div class="fw-semibold">{{ object.geraet.bezeichnung | default:'—' }}</div>
       </div>
       <div class="col-md-6">
         <div class="text-muted small">Prüfungsdatum</div>
