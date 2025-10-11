@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from geraete.views import GeraetListView
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', GeraetListView.as_view(), name="geraete_liste"),
