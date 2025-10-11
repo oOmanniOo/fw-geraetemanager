@@ -4,7 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Prüfungsbericht · {{ object.geraet.bezeichnung }}</title>
+
   <style>
+    /* =======================
+       Grundlayout & Farben
+    ======================== */
     @page {
       size: A4;
       margin: 18mm 16mm 18mm 16mm;
@@ -17,39 +21,53 @@
       --bg: #ffffff;
       --ok: #16a34a;
       --error: #dc2626;
-      --chip: #f3f4f6;
+      --chip-bg: #f9fafb;
+      --chip-border: #d1d5db;
+      --header-bg: #f3f4f6;
+      --section-bg: #fafafa;
+      --accent: #000000ff;
     }
 
-    html, body { padding: 0; margin: 0; }
+    html, body {
+      padding: 0;
+      margin: 0;
+    }
+
     body {
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       color: var(--text);
       background: var(--bg);
-      line-height: 1.45;
       font-size: 12.5px;
+      line-height: 1.45;
     }
 
     .page {
       display: block;
     }
 
+    /* =======================
+       Kopfbereich
+    ======================== */
     .header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 18px;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
       padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
     }
 
     .title {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
       margin: 0;
+      color: var(--accent);
     }
 
-    .subtitle { color: var(--muted); margin-top: 2px; }
+    .subtitle {
+      color: var(--muted);
+      margin-top: 3px;
+    }
 
     .status-chip {
       display: inline-block;
@@ -57,84 +75,152 @@
       padding: 6px 10px;
       font-weight: 600;
       font-size: 11.5px;
-      letter-spacing: .2px;
-      background: var(--chip);
-      border: 1px solid var(--border);
+      background: var(--chip-bg);
+      border: 1px solid var(--chip-border);
       white-space: nowrap;
     }
-    .status-ok { color: var(--ok); border-color: #bbf7d0; background: #f0fdf4; }
-    .status-fail { color: var(--error); border-color: #fecaca; background: #fef2f2; }
+    .status-ok {
+      color: var(--ok);
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+    }
+    .status-fail {
+      color: var(--error);
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    /* =======================
+       Geräteinfos (Grid)
+    ======================== */
+    .section {
+      background: var(--section-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+
+    .section h2 {
+      font-size: 14px;
+      margin: 0 0 10px 0;
+      color: var(--accent);
+    }
 
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px 18px;
-      margin-bottom: 14px;
+      gap: 10px 20px;
     }
-    .grid .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .3px; }
-    .grid .value { font-weight: 600; margin-top: 2px; }
 
+    .label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .value {
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* =======================
+       Bemerkung / Notizen
+    ======================== */
     .note {
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 10px 12px;
-      background: #fafafa;
+      background: var(--section-bg);
       margin-top: 8px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
-    table { width: 100%; border-collapse: collapse; }
+    /* =======================
+       Tabelle mit Prüfpunkten
+    ======================== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
     thead th {
       text-align: left;
       color: var(--muted);
       font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: .3px;
-      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.3px;
+      border-bottom: 2px solid var(--border);
       padding: 8px 6px;
+      background: var(--header-bg);
     }
+
     tbody td {
       border-bottom: 1px solid var(--border);
-      padding: 9px 6px;
+      padding: 8px 6px;
       vertical-align: top;
     }
-    .cell-center { text-align: center; }
-    .req { color: var(--error); font-weight: 700; }
-    .muted { color: var(--muted); }
+
+    tbody tr:nth-child(even) {
+      background: #f9fafb;
+    }
+
+    .cell-center {
+      text-align: center;
+    }
+
+    .req {
+      color: var(--error);
+      font-weight: 700;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    /* =======================
+       Signaturen / Footer
+    ======================== */
+    .signature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .sig-box {
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+      min-height: 40px;
+    }
 
     .foot {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
-      margin-top: 18px;
-      padding-top: 10px;
+      margin-top: 20px;
+      padding-top: 12px;
       border-top: 1px solid var(--border);
       color: var(--muted);
       font-size: 11px;
     }
-
-    .signature {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-top: 16px;
-    }
-    .sig-box {
-      border-top: 1px solid var(--border);
-      padding-top: 6px;
-      min-height: 40px;
-    }
   </style>
+
   {% load static %}
   {% load i18n %}
 </head>
+
 <body>
   <div class="page">
+
+    <!-- Header -->
     <div class="header">
       <div>
-        <h1 class="title">Prüfungbericht {{ object.geraet.bezeichnung }}</h1>
+        <h1 class="title">Prüfungsbericht · {{ object.geraet.bezeichnung }}</h1>
         <div class="subtitle">{{ object.art.name }} · {{ object.datum|date:"d.m.Y" }}</div>
       </div>
+      
       <div>
         {% if object.bestanden %}
           <span class="status-chip status-ok">✓ Bestanden</span>
@@ -142,55 +228,65 @@
           <span class="status-chip status-fail">✗ Nicht bestanden</span>
         {% endif %}
       </div>
+      
+      <!--
+      <div>
+        <img src="{% static 'icons/zug2_logo.svg' %}" alt="Check Icon" width="16px">
+      </div>
+    -->
     </div>
-
-    <div class="grid">
-      <div>
-        <div class="label">Gerät</div>
-        <div class="value">{{ object.geraet.bezeichnung }}</div>
-      </div>
-      <div>
-        <div class="label">Barcode:</div>
-        <div class="value">{{ object.geraet.barcode|default:'—'}}</div>
-      </div>
-      <div>
-        <div class="label">Seriennummer:</div>
-        <div class="value">{{ object.geraet.seriennummer|default:'—'}}</div>
-      </div>
-      <div>
-        <div class="label">Prüfungsart</div>
-        <div class="value">{{ object.art.name }}</div>
-      </div>
-      <div>
-        <div class="label">Prüfungsdatum</div>
-        <div class="value">{{ object.datum|date:"d.m.Y" }}</div>
-      </div>
-      <div>
-        <div class="label">Prüfer</div>
-        <div class="value">{{ object.pruefer|default:'—' }}</div>
-      </div>
-      <div>
-        <div class="label">Status</div>
-        <div class="value">
-          {% if object.bestanden %}
-            ✓ Bestanden
-          {% else %}
-            ✗ Nicht bestanden
-          {% endif %}
+    <!-- Geräteinformationen -->
+    <div class="section">
+      <h2>Geräteinformationen</h2>
+      <div class="grid">
+        <div>
+          <div class="label">Gerät</div>
+          <div class="value">{{ object.geraet.identifikation }}</div>
+        </div>
+        <div>
+          <div class="label">Barcode</div>
+          <div class="value">{{ object.geraet.barcode|default:'—'}}</div>
+        </div>
+        <div>
+          <div class="label">Seriennummer</div>
+          <div class="value">{{ object.geraet.seriennummer|default:'—'}}</div>
+        </div>
+        <div>
+          <div class="label">Prüfungsart</div>
+          <div class="value">{{ object.art.name }}</div>
+        </div>
+        <div>
+          <div class="label">Prüfungsdatum</div>
+          <div class="value">{{ object.datum|date:"d.m.Y" }}</div>
+        </div>
+        <div>
+          <div class="label">Prüfer</div>
+          <div class="value">{{ object.pruefer|default:'—' }}</div>
+        </div>
+        <div>
+          <div class="label">Status</div>
+          <div class="value">
+            {% if object.bestanden %}
+              ✓ Bestanden
+            {% else %}
+              ✗ Nicht bestanden
+            {% endif %}
+          </div>
+        </div>
+        <div>
+          <div class="label">Nächste Prüfung</div>
+          <div class="value">
+            {% if object.naechste_pruefung %}
+              {{ object.naechste_pruefung }}
+            {% else %}
+              Keine Intervalle (nur nach Benutzung)
+            {% endif %}
+          </div>
         </div>
       </div>
-      <div>
-        <div class="label">Nächste Prüfung</div>
-        <div class="value">
-          {% if object.naechste_pruefung %}
-            {{ object.naechste_pruefung }}
-          {% else %}
-            Keine Intervalle (nur nach Benutzung)
-          {% endif %}
-        </div>
-      </div>
     </div>
 
+    <!-- Bemerkung -->
     {% if object.bemerkung %}
       <div class="note">
         <strong>Bemerkung:</strong>
@@ -198,51 +294,63 @@
       </div>
     {% endif %}
 
-    <h2 style="margin: 14px 0 8px 0; font-size: 14px;">Prüfpunkte</h2>
-    {% if object.antworten.all %}
-      <table>
-        <thead>
-          <tr>
-            <th style="width: 60%;">Prüfpunkt</th>
-            <th class="cell-center" style="width: 15%;">Status</th>
-            <th>Bemerkung</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for antwort in object.antworten.all %}
+    <!-- Prüfpunkte -->
+    <div class="section">
+      <h2>Prüfpunkte</h2>
+      {% if object.antworten.all %}
+        <table>
+          <thead>
             <tr>
-              <td>
-                {{ antwort.punkt_name }}
-                {% if antwort.is_pflicht %}
-                  <span class="req" aria-label="Pflicht">*</span>
-                {% endif %}
-              </td>
-              <td class="cell-center">
-                {% if antwort.ok %}
-                  <span style="color: var(--ok); font-weight: 700;">OK</span>
-                {% else %}
-                  <span style="color: var(--error); font-weight: 700;">Nicht Ok</span>
-                {% endif %}
-              </td>
-              <td>
-                {% if antwort.bemerkung %}
-                  <span class="muted">{{ antwort.bemerkung }}</span>
-                {% else %}
-                  <span class="muted">—</span>
-                {% endif %}
-              </td>
+              <th style="width: 55%;">Prüfpunkt</th>
+              <th class="cell-center" style="width: 15%;">Status</th>
+              <th>Bemerkung</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <div class="muted">Keine Prüfpunkte vorhanden.</div>
-    {% endif %}
+          </thead>
+          <tbody>
+            {% for antwort in object.antworten.all %}
+              <tr>
+                <td>
+                  {{ antwort.punkt_name }}
+                  {% if antwort.is_pflicht %}
+                    <span class="req">*</span>
+                  {% endif %}
+                </td>
+                <td class="cell-center">
+                  {% if antwort.ok %}
+                    <span style="color: var(--ok); font-weight: 700;">OK</span>
+                  {% else %}
+                    <span style="color: var(--error); font-weight: 700;">Nicht OK</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if antwort.bemerkung %}
+                    <span class="muted">{{ antwort.bemerkung }}</span>
+                  {% else %}
+                    <span class="muted">—</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="muted">Keine Prüfpunkte vorhanden.</div>
+      {% endif %}
+    </div>
 
+    <!-- Signaturen -->
+    <!--
+    <div class="signature">
+      <div class="sig-box">Unterschrift Prüfer</div>
+      <div class="sig-box">Unterschrift Verantwortlicher</div>
+    </div>
+    -->
+    <!-- Fußbereich -->
     <div class="foot">
       <div>Gerätemanager · Prüfungs-ID: {{ object.id }}</div>
       <div>Erstellt am {% now "d.m.Y H:i" %}</div>
     </div>
+
   </div>
 </body>
 </html>
