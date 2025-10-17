@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'geraete',
     'fahrzeuge',
     'pruefungen',
+    'wartung',
 ]
 
 MIDDLEWARE = [

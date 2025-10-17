@@ -32,5 +32,5 @@ class Geraet(models.Model):
         ordering = ['kategorie', 'bezeichnung']
 
     def __str__(self):
-        return f"{self.bezeichnung} ({self.identifikation})"
+        return self.identifikation
         
