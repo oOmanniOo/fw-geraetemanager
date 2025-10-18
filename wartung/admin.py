@@ -15,6 +15,7 @@ class WartungszuordnungAdmin(admin.ModelAdmin):
     list_filter = ("aktiv", "wartungsart__kategorie")
     search_fields = ("fahrzeug__bezeichnung", "geraet__identifikation", "wartungsart__name")
     readonly_fields = ("naechste_wartung",)  # Wird automatisch berechnet
+    autocomplete_fields = ("geraet", "fahrzeug") 
 
 @admin.register(Wartungsvorgang)
 class WartungsvorgangAdmin(admin.ModelAdmin):

@@ -8,6 +8,7 @@ from .models import Fahrzeug, Geraeteraum
 class FahrzeugAdmin(admin.ModelAdmin):
     list_display = ('bezeichnung', 'kennzeichen', 'funkrufname', 'standort', 'aktiv', )
     list_filter = ('aktiv',)
+    search_fields = ('bezeiuchnung', 'kennzeichen', 'funkrufname')
 
 
 @admin.register(Geraeteraum)
